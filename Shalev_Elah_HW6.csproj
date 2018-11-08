@@ -1,0 +1,75 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
+    <Folder Include="wwwroot\lib\" />
+    <Folder Include="wwwroot\lib\jquery\" />
+    <Folder Include="wwwroot\lib\twiter-bootstrap\" />
+    <Folder Include="wwwroot\lib\twiter-bootstrap\js\" />
+    <Folder Include="wwwroot\lib\twiter-bootstrap\css\" />
+    <Folder Include="Views\" />
+    <Folder Include="Models\" />
+    <Folder Include="Controllers\" />
+    <Folder Include="Views\Shared\" />
+    <Folder Include="DAL\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="wwwroot\lib\jquery\jquery-3.3.1.js" />
+    <Content Remove="wwwroot\lib\twiter-bootstrap\css\bootstrap-grid.css" />
+    <Content Remove="wwwroot\lib\twiter-bootstrap\css\bootstrap-grid.css.map" />
+    <Content Remove="wwwroot\lib\twiter-bootstrap\css\bootstrap-grid.min.css" />
+    <Content Remove="wwwroot\lib\twiter-bootstrap\css\bootstrap-grid.min.css.map" />
+    <Content Remove="wwwroot\lib\twiter-bootstrap\css\bootstrap-reboot.css" />
+    <Content Remove="wwwroot\lib\twiter-bootstrap\css\bootstrap-reboot.css.map" />
+    <Content Remove="wwwroot\lib\twiter-bootstrap\css\bootstrap-reboot.min.css" />
+    <Content Remove="wwwroot\lib\twiter-bootstrap\css\bootstrap-reboot.min.css.map" />
+    <Content Remove="wwwroot\lib\twiter-bootstrap\css\bootstrap.css" />
+    <Content Remove="wwwroot\lib\twiter-bootstrap\css\bootstrap.css.map" />
+    <Content Remove="wwwroot\lib\twiter-bootstrap\css\bootstrap.min.css" />
+    <Content Remove="wwwroot\lib\twiter-bootstrap\css\bootstrap.min.css.map" />
+    <Content Remove="wwwroot\lib\twiter-bootstrap\js\bootstrap.bundle.js" />
+    <Content Remove="wwwroot\lib\twiter-bootstrap\js\bootstrap.bundle.js.map" />
+    <Content Remove="wwwroot\lib\twiter-bootstrap\js\bootstrap.bundle.min.js" />
+    <Content Remove="wwwroot\lib\twiter-bootstrap\js\bootstrap.bundle.min.js.map" />
+    <Content Remove="wwwroot\lib\twiter-bootstrap\js\bootstrap.js" />
+    <Content Remove="wwwroot\lib\twiter-bootstrap\js\bootstrap.js.map" />
+    <Content Remove="wwwroot\lib\twiter-bootstrap\js\bootstrap.min.js" />
+    <Content Remove="wwwroot\lib\twiter-bootstrap\js\bootstrap.min.js.map" />
+    <Content Remove="Views\_ViewImports.cshtml" />
+    <Content Remove="Views\_ViewStart.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="wwwroot\lib\jquery\jquery-3.3.1.js" />
+    <None Include="wwwroot\lib\twiter-bootstrap\css\bootstrap-grid.css" />
+    <None Include="wwwroot\lib\twiter-bootstrap\css\bootstrap-grid.css.map" />
+    <None Include="wwwroot\lib\twiter-bootstrap\css\bootstrap-grid.min.css" />
+    <None Include="wwwroot\lib\twiter-bootstrap\css\bootstrap-grid.min.css.map" />
+    <None Include="wwwroot\lib\twiter-bootstrap\css\bootstrap-reboot.css" />
+    <None Include="wwwroot\lib\twiter-bootstrap\css\bootstrap-reboot.css.map" />
+    <None Include="wwwroot\lib\twiter-bootstrap\css\bootstrap-reboot.min.css" />
+    <None Include="wwwroot\lib\twiter-bootstrap\css\bootstrap-reboot.min.css.map" />
+    <None Include="wwwroot\lib\twiter-bootstrap\css\bootstrap.css" />
+    <None Include="wwwroot\lib\twiter-bootstrap\css\bootstrap.css.map" />
+    <None Include="wwwroot\lib\twiter-bootstrap\css\bootstrap.min.css" />
+    <None Include="wwwroot\lib\twiter-bootstrap\css\bootstrap.min.css.map" />
+    <None Include="wwwroot\lib\twiter-bootstrap\js\bootstrap.bundle.js" />
+    <None Include="wwwroot\lib\twiter-bootstrap\js\bootstrap.bundle.js.map" />
+    <None Include="wwwroot\lib\twiter-bootstrap\js\bootstrap.bundle.min.js" />
+    <None Include="wwwroot\lib\twiter-bootstrap\js\bootstrap.bundle.min.js.map" />
+    <None Include="wwwroot\lib\twiter-bootstrap\js\bootstrap.js" />
+    <None Include="wwwroot\lib\twiter-bootstrap\js\bootstrap.js.map" />
+    <None Include="wwwroot\lib\twiter-bootstrap\js\bootstrap.min.js" />
+    <None Include="wwwroot\lib\twiter-bootstrap\js\bootstrap.min.js.map" />
+    <None Include="Views\_ViewImports.cshtml" />
+    <None Include="Views\_ViewStart.cshtml" />
+  </ItemGroup>
+</Project>
