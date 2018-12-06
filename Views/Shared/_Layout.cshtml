@@ -1,34 +1,72 @@
-﻿@addTagHelper "* , Microsoft.AspNetCore.Mvc.TagHelpers"
+﻿@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
 <!DOCTYPE html>
 <html>
 <head>
-    <meta name="viewport" content="width=device-width" />
-    <title>@ViewBag.Title</title>
-    <link href="~/lib/twitter-bootstrap/css/bootstrap.css" rel="stylesheet" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Bevo's Books</title>
+    <link href="https://bootswatch.com/4/lux/bootstrap.min.css" rel="stylesheet" />
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <div class="container">
-            <div class="navbar-header">
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#nav-content" aria-controls="nav-content" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">Fancy Food Truck</a>
-            </div>
+    <div>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#nav-content" aria-controls="nav-content" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
             <div class="collapse navbar-collapse" id="nav-content">
                 <ul class="navbar-nav mr-auto">
-                    <li class="nav-item"><a asp-controller="Home" asp-action="Index" class="nav-link">Home</a></li>
-                    <li class="nav-item"><a asp-controller="Suppliers" asp-action="Index" class="nav-link">Suppliers</a></li>
+                    <li class="nav-item">@Html.ActionLink("Home", "Index", "Home", null, new { @class = "nav-link" })</li>
+                    <li class="nav-item">@Html.ActionLink("Books", "Index", "Book", null, new { @class = "nav-link" })</li>
+                    <li class="nav-item">@Html.ActionLink("Detailed Search", "Index", "DetailedSearch", null, new { @class = "nav-link" })</li>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li class="nav-item">@Html.ActionLink("Orders", "Index", "Order", null, new { @class = "nav-link" })</li>
+
+                        if (User.IsInRole("Customer"))
+                        {
+                            <li class="nav-item">@Html.ActionLink("Cart", "Cart", "Order", null, new { @class = "nav-link" })</li>
+                        }
+
+                        if (User.IsInRole("Manager"))
+                        {
+                            <li class="nav-item">
+                                @Html.ActionLink("Supplier Orders", "Index", "BookOrder", null, new { @class = "nav-link" })
+                            </li>
+                            <li class="nav-item">
+                                @Html.ActionLink("Manage Users", "Index", "RoleAdmin", null, new { @class = "nav-link" })
+                            </li>
+                            <li class="nav-item">
+                                @Html.ActionLink("Pending Reviews", "Index", "Reviews", null, new { @class = "nav-link" })
+                            </li>
+                            <li class="nav-item">
+                                @Html.ActionLink("Discounts", "Index", "Discount", null, new { @class = "nav-link" })
+                            </li>
+                            <li class="nav-item">
+                                @Html.ActionLink("Reports", "Index", "Report", null, new { @class = "nav-link" })
+                            </li>
+                        }
+
+                    }
+                    else
+                    {
+                        <li class="nav-item">
+                            @Html.ActionLink("Log In", "Index", "Account", null, new { @class = "nav-link" })
+                        </li>
+                    }
                 </ul>
             </div>
-        </div>
-    </nav>
-
-    <div class="container">
-        @RenderBody()
+            @await Html.PartialAsync("_LoginPartial")
+        </nav>
     </div>
-    <script src="~/lib/jquery/jquery-3.3.1.js"></script>
-    <script src="~/lib/twitter-bootstrap/js/bootstrap.bundle.js"></script>
-    @RenderSection("Scripts", required: false)
+    <div>
+        <p></p>
+    </div>
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+    </div>
+    <script src="~/lib/jquery/jquery.js"></script>
+    <script src="~/lib/twitter-bootstrap/js/bootstrap.js"></script>
 </body>
 </html>

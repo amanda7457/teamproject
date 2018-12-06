@@ -1,0 +1,55 @@
+﻿@using Group14_BevoBooks.Models
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+@model Group14_BevoBooks.Models.Order
+<h2>Order History</h2>
+<div class="container">
+    <div class="row">
+        <div class="col-sm">
+            <table class="table table-hover">
+                <thead class="thead-dark">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Quantity</th>
+                        <th>Item Price</th>
+                        <th>Extended Price</th>
+                        <th>Payment Information</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @foreach (OrderDetail od in Model)
+                {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => od.Book.Title)</td>
+                    <td>@Html.DisplayFor(modelItem => od.Quantity)</td>
+                    <td>@Html.DisplayFor(modelItem => od.Price)</td>
+                    <td>@Html.DisplayFor(modelItem => od.ExtendedPrice)</td>
+                    <td>@Html.DisplayFor(modelItem => od.CreditCard)</td>
+                </tr>
+                }
+                </tbody>
+            </table>
+
+            <table class="table table-sm table-bordered">
+                <tr>
+                    <td>Order Subtotal</td>
+                    <td>@Html.DisplayFor(o => o.OrderSubtotal)</td>
+                </tr>
+                <tr>
+                    <td>Shipping</td>
+                    <td>@Html.DisplayFor(o => o.OrderShipping)</td>
+                </tr>
+                <tr class="table-active">
+                    <td>Order Total</td>
+                    <td>@Html.DisplayFor(o => o.OrderTotal)</td>
+                </tr>
+            </table>
+            <div>
+                <a asp-controller="Review" asp-action="PlaceOrder" asp-route-id="@Model.OrderHistoryID" class="btn btn-info">Write a Review</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+

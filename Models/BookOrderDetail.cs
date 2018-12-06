@@ -3,9 +3,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Group14_BevoBooks.Models
 {
-    public class OrderDetail
+    public class BookOrderDetail
     {
-        public Int32 OrderDetailID { get; set; }
+        public Int32 BookOrderDetailID { get; set; }
 
         [Display(Name = "Quantity")]
         public Int32 Quantity { get; set; }
@@ -21,15 +21,8 @@ namespace Group14_BevoBooks.Models
             get { return Price * Quantity; }
         }
 
-        [Display(Name = "Profit Margin")]
-        [DisplayFormat(DataFormatString = "{0:C}")]
-        public Decimal ProfitMargin
-        {
-            get { return Price - Book.AverageCost; }
-        }
-
         //navigation
-        public Order Order { get; set; }
+        public BookOrder Order { get; set; }
         public Book Book { get; set; }
     }
 }

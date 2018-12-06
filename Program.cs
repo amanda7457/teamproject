@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
-namespace Shalev_Elah_HW6
+namespace Group14_BevoBooks
 {
     public class Program
     {
