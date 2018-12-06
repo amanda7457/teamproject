@@ -77,7 +77,20 @@ namespace Group14_BevoBooks.Controllers
         public IActionResult Totals()
         {
             //total cost, total profit and total revenue -> get all od and all books???
-            List<Book> allbooks = 
+            List<OrderDetail> allorderdetails = _context.OrderDetails.Include(o => o.Order).Include(o => o.Book).ToList();
+
+            //total revenue = num of each od extended price
+            Decimal totalrevenue = allorderdetails.Sum(bo => bo.ExtendedPrice);
+
+            Decimal totalcost = allorderdetails.Sum(bo => bo.Cost);
+
+            Decimal totalprofit = totalrevenue - totalcost;
+
+            ViewBag.TotalRevenue = totalrevenue.ToString("C");
+            ViewBag.TotalCost = totalcost.ToString("C");
+            ViewBag.TotalProfit = totalprofit.ToString("C");
+
+            return View();
 
         }
 

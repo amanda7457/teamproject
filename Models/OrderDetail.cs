@@ -25,7 +25,14 @@ namespace Group14_BevoBooks.Models
         [DisplayFormat(DataFormatString = "{0:C}")]
         public Decimal ProfitMargin
         {
-            get { return Price - Book.AverageCost; }
+            get { return ExtendedPrice - (Book.AverageCost * Quantity); }
+        }
+
+        [Display(Name = "Cost")]
+        [DisplayFormat(DataFormatString = "{0:C}")]
+        public Decimal Cost
+        {
+            get { return Quantity * Book.AverageCost; }
         }
 
         //navigation

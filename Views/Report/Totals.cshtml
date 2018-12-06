@@ -1,5 +1,38 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@using Group14_BevoBooks.Models
+
 @{
+    ViewData["Title"] = "Report - Totals";
 }
+<h2>Totals</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Total Revenue
+            </th>
+            <th>
+                Total Cost
+            </th>
+            <th>
+                Total Profit
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+
+        <tr>
+            <td>
+                @ViewBag.TotalRevenue
+            </td>
+            <td>
+                @ViewBag.TotalCost
+            </td>
+            <td>
+                @ViewBag.TotalProfit
+            </td>
+        </tr>
+
+    </tbody>
+</table>
