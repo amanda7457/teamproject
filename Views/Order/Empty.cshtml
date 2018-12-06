@@ -1,0 +1,13 @@
+﻿@model IEnumerable<String>
+
+<h2>Cart</h2>
+
+<p>Empty Cart.</p>
+@if (Model != null)
+{
+    foreach (String message in Model)
+    {
+        <p><span class="text-danger">@message</span></p>
+    }
+}
+<a asp-action="Index" asp-controller="Book" class="btn btn-default">See All Books</a>

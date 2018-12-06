@@ -1,0 +1,34 @@
+﻿@model IEnumerable<Group14_BevoBooks.Models.Shipping>
+@{
+    ViewData["Title"] = "Shipping Cost";
+}
+<h2>Shipping Prices</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ShippingFirst)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ShippingAdditional)
+            </th>
+            <th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ShippingFirst)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ShippingAdditional)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.ShippingID">Edit</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,16 @@
+﻿@model Group14_BevoBooks.Models.Book
+@{
+    ViewBag.Title = "Create";
+}
+<h2>Add To Order</h2>
+
+<form asp-action="Create" asp-controller="Review">
+    <div class="form-group">
+        @Html.HiddenFor(model => model.BookID, new { id = "bookid" })
+    </div>
+<button type="submit" class="btn btn-danger">Write A Review</button>
+</form>
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>

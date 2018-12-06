@@ -1,0 +1,11 @@
+﻿@using Group14_BevoBooks.Models
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+
+@model IEnumerable<Group14_BevoBooks.Models.BookOrder>
+
+<h1>Order From Supplier</h1>
+
+<a asp-controller="BookOrder" asp-action="SupplierCart" class="btn btn-info">Pending Manual Orders</a>
+<a asp-controller="BookOrder" asp-action="CreateAuto" class="btn btn-info">Automatic Order</a>
+<a asp-controller="BookOrder" asp-action="BookOrderList" class="btn btn-info">Order List</a>

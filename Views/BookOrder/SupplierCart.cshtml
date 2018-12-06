@@ -1,0 +1,55 @@
+﻿@using Group14_BevoBooks.Models
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+@model IEnumerable<Group14_BevoBooks.Models.BookOrder>
+@{
+    ViewData["Title"] = "Auto Reorder";
+}
+
+<h2>Manual Supplier Orders</h2>
+
+<a asp-controller="BookOrder" asp-action="PlaceManualOrder" class="btn btn-info">Place All Orders</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Reorder Quantity
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Book.Inventory)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Book.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Quantity)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Book.Inventory)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Book.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.BookOrderID">Edit</a> |
+                    <a asp-action="Delete" asp-route-id="@item.BookOrderID">Remove</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

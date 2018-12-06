@@ -1,0 +1,67 @@
+﻿@using Group14_BevoBooks.Models
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+
+@model Group14_BevoBooks.Models.Order
+
+@{
+    ViewData["Title"] = "Cart";
+}
+<h2>Cart</h2>
+
+<div>
+    <table class="table table-hover">
+        <thead class="thead-dark">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Quantity</th>
+                <th>Item Price</th>
+                <th>Extended Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (OrderDetail od in Model.OrderDetails)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => od.Book.Title)</td>
+                    <td>@Html.DisplayFor(modelItem => od.Quantity)</td>
+                    <td>@Html.DisplayFor(modelItem => od.Price)</td>
+                    <td>@Html.DisplayFor(modelItem => od.ExtendedPrice)</td>
+                    <td>
+                        <a asp-controller="OrderDetail" asp-action="Edit" asp-route-id="@od.OrderDetailID">Change Quantity</a> |
+                        <a asp-controller="OrderDetail" asp-action="Delete" asp-route-id="@od.OrderDetailID">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<div></div>
+<div>
+    <table class="table table-sm table-bordered" style="width:30%">
+        <tr>
+            <th colspan="2" style="text-align:center">Order Summary</th>
+        </tr>
+        <tr>
+            <td>Order Subtotal</td>
+            <td>@Html.DisplayFor(o => o.OrderSubtotal)</td>
+        </tr>
+        <tr>
+            <td>Shipping</td>
+            <td>@Html.DisplayFor(o => o.OrderShipping)</td>
+        </tr>
+        <tr>
+            <td>Order Total</td>
+            <td>@Html.DisplayFor(o => o.OrderTotal)</td>
+        </tr>
+    </table>
+</div>
+<div></div>
+<div>
+    <a asp-controller="Order" asp-action="Checkout" asp-route-id="@Model.OrderID" class="btn btn-info">Checkout</a>
+</div>
+<p></p>
+<div>
+    <a asp-controller ="Book" asp-action="Index">Continue Shopping</a>
+</div>

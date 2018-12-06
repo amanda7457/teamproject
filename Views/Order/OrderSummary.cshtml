@@ -1,0 +1,81 @@
+﻿@using Group14_BevoBooks.Models
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+@model Group14_BevoBooks.Models.Order
+<h2>Order Summary</h2>
+<div class="container">
+    <div class="row">
+        <div class="col-sm">
+            <table class="table table-hover">
+                <thead class="thead-dark">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Quantity</th>
+                        <th>Item Price</th>
+                        <th>Extended Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @foreach (OrderDetail od in Model.OrderDetails)
+                {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => od.Book.Title)</td>
+                    <td>@Html.DisplayFor(modelItem => od.Quantity)</td>
+                    <td>@Html.DisplayFor(modelItem => od.Price)</td>
+                    <td>@Html.DisplayFor(modelItem => od.ExtendedPrice)</td>
+                </tr>
+                }
+                </tbody>
+            </table>
+
+            <table class="table table-sm table-bordered">
+                <tr>
+                    <td>Order Subtotal</td>
+                    <td>@Html.DisplayFor(o => o.OrderSubtotal)</td>
+                </tr>
+                <tr>
+                    <td>Shipping</td>
+                    <td>@Html.DisplayFor(o => o.OrderShipping)</td>
+                </tr>
+                <tr class="table-active">
+                    <td>Order Total</td>
+                    <td>@Html.DisplayFor(o => o.OrderTotal)</td>
+                </tr>
+            </table>
+
+        </div>
+        <div class="col-sm-1">
+        </div>
+        <div class="col-sm">
+            <table class="table table-hover">
+                <tbody>
+                    <tr>
+                        <th scope="row">Name</th>
+                        <td>@Html.DisplayFor(o => o.AppUser.FirstName) @Html.DisplayFor(o => o.AppUser.LastName)</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Email</th>
+                        <td>@Html.DisplayFor(o => o.AppUser.Email)</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Address</th>
+                        <td>@ViewBag.FullAddress</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Payment Method</th>
+                        <td>@ViewBag.CreditCard</td>
+                    </tr>
+                </tbody>
+            </table>
+            <form asp-action="PlaceOrder" asp-controller="Order" method="post">
+                <div class="form-group">
+                    @Html.HiddenFor(model => model.OrderID, new { id = "orderid" })
+                </div>
+                <button type="submit" class="btn btn-danger">Place Order</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+

@@ -1,0 +1,55 @@
+@model Group14_BevoBooks.Models.Book
+@using Group14_BevoBooks.Models
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Book Details</h2>
+
+<div>
+    <h4>Book</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.UniqueID)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.UniqueID)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Title)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Title)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Author)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Author)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Genre)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Genre.GenreName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.SellingPrice)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.SellingPrice)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.PublishedDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PublishedDate)
+        </dd>
+    </dl>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>

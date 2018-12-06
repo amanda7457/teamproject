@@ -1,0 +1,62 @@
+@using Group14_BevoBooks.Models
+@model Group14_BevoBooks.Models.Order
+@{
+    ViewData["Title"] = "Details";
+}
+<h2>Details</h2>
+<div>
+    <h4>Order</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.OrderDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.OrderDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.OrderTotal)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.OrderTotal)
+        </dd>
+        <dd>
+            Payment Method:
+        </dd>
+        <dd>
+            @ViewBag.CreditCard
+        </dd>
+    </dl>
+</div>
+<div>
+    <table class="table table-hover">
+        <thead class="thead-dark">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Quantity</th>
+                <th>Item Price</th>
+                <th>Extended Price</th>
+                <th>Rating and Review</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (OrderDetail od in Model.OrderDetails)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => od.Book.Title)</td>
+                    <td>@Html.DisplayFor(modelItem => od.Quantity)</td>
+                    <td>@Html.DisplayFor(modelItem => od.Price)</td>
+                    <td>@Html.DisplayFor(modelItem => od.ExtendedPrice)</td>
+                    <td>@Html.HiddenFor(modelItem => od.Book.BookID, new { id = "bookid" })</td>
+                    <td><a asp-controller="Book" asp-action="Details" asp-route-id="@od.Book.BookID">Write a Review</a> </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.OrderID">Edit</a> |
+
+    <a asp-action="Index">Back to List</a>
+</div>

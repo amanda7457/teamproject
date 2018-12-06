@@ -1,0 +1,65 @@
+﻿@using Group14_BevoBooks.Models
+
+@model IEnumerable<Group14_BevoBooks.Models.OrderDetail>
+@{
+    ViewData["Title"] = "Report - All Books Sold";
+}
+
+<p>@ViewBag.ReportCount Results></p>
+<h2>All Books Report</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Book.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Quantity)
+            </th>
+            <th>
+                Order Number
+            </th>
+            <th>
+                Customer
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Book.AverageCost)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProfitMargin)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Book.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Quantity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Order.OrderID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Order.AppUser.FirstName)
+                @Html.DisplayFor(modelItem => item.Order.AppUser.LastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Book.AverageCost)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProfitMargin)
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>

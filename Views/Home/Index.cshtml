@@ -1,0 +1,45 @@
+﻿@model IEnumerable<Group14_BevoBooks.Models.Discount>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Welcome @ViewBag.Name</h2>
+
+@if (User.IsInRole("Customer"))
+{
+    <h4>Available Discount Codes</h4>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.PromoCode)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DiscountAmount)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DiscountType)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PromoCode)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DiscountAmount)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DiscountType)
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+
+}

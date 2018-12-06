@@ -1,0 +1,48 @@
+@model Group14_BevoBooks.Models.Discount
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Discount</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.PromoCode)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PromoCode)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DiscountAmount)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DiscountAmount)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DiscountStartDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DiscountStartDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DiscountEndDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DiscountEndDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DiscountType)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DiscountType)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.DiscountID">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

@@ -1,0 +1,51 @@
+@model IEnumerable<Group14_BevoBooks.Models.BookOrder>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Supplier Orders</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Book.Title)
+            </th>
+            <th>
+                Quantity Ordered
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>
+                Employee
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Book.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Quantity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AppUser.FirstName)
+                @Html.DisplayFor(modelItem => item.AppUser.LastName)
+            </td>
+            <td>
+                <a asp-action="BookArrival" asp-route-id="@item.BookOrderID">Check In</a> |
+                <a asp-action="Details" asp-route-id="@item.BookOrderID">Details</a>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,165 @@
+﻿@using Group14_BevoBooks.Models
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+@model Group14_BevoBooks.Models.Order
+
+<h2>Checkout</h2>
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm">
+            <table class="table table-sm table-bordered">
+                <thead class="thead-dark">
+                <thead>
+                    <tr>
+                        <th colspan="3" style="text-align:center">Order Summary</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @foreach (OrderDetail od in Model.OrderDetails)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => od.Book.Title)</td>
+                        <td>@Html.DisplayFor(modelItem => od.Quantity)</td>
+                        <td>@Html.DisplayFor(modelItem => od.ExtendedPrice)</td>
+                    </tr>
+                }
+                    <tr>
+                        <td>@Html.DisplayNameFor(o => o.OrderShipping)</td>
+                        <td> </td>
+                        <td>@Html.DisplayFor(o => o.OrderShipping)</td>
+                    </tr>
+                    <tr class="table-active">
+                        <th scope="col">Order Total</th>
+                        <th scope="col">@ViewBag.BookCount</th>
+                    <th scope="col">@Html.DisplayFor(o => o.OrderTotal)</th>
+                </tr>
+            </tbody>
+        </table>
+
+        <form asp-action="Redeem">
+            <div class="form-group">
+                <div class="form-group">
+                    <label></label>
+                    <input name="promocodeinput" class="form-control" placeholder="PROMO CODE" />
+                </div>
+                <div>@ViewBag.PromoMessage</div>
+            </div>
+            <div><input type="hidden" asp-for="OrderID" /></div>
+            <div class="form-group">
+                <input type="submit" value="Redeem" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+
+    <div class="col-sm-1">
+    </div>
+
+    <div class="col-sm">
+        <form asp-action="Checkout">
+            <div class="row">
+                <div class="col">
+                    <label for="FirstName">First Name: </label>
+                    <div class="col-sm-20">
+                        <input type="text" readonly class="form-control-plaintext" id="FirstName" value=@Html.DisplayFor(modelItem => Model.AppUser.FirstName)>
+                    </div>
+                </div>
+                <div class="col">
+                    <label for="LastName">Last Name: </label>
+                    <div class="col-sm-20">
+                        <input type="text" readonly class="form-control-plaintext" id="LastName" value=@Html.DisplayFor(modelItem => Model.AppUser.LastName)>
+                    </div>
+                </div>
+            </div>
+            <div class="row"></div>
+            <div class="row">
+                <div class="col">
+                    <div class="col-sm-40">
+                        <label for="Email">Email: </label>
+                        <input type="text" readonly class="form-control-plaintext" id="Email" value=@Html.DisplayFor(modelItem => Model.AppUser.Email)>
+                    </div>
+                </div>
+            </div>
+
+
+            <fieldset class="form-group">
+                <div class="row">
+                    <h1>Payment Information</h1>
+
+                    @if(Model.AppUser.CreditCards.Count == 0)
+                    {
+                    <div class="col-sm-20">
+                        <a asp-controller="CreditCard" asp-action="Create" class="btn btn-info">Add Card</a>
+                    </div>
+                    }
+
+                    @if(Model.AppUser.CreditCards.Count == 1)
+                    {
+                    <div class="col-sm-20">
+                        <div class="form-group">
+                            <label class="radio">
+                                @Html.RadioButton("SelectedCreditCard", 1, true) @ViewBag.CC1 |
+                                <a asp-controller="CreditCard" asp-action="Edit" asp-route-id="@Model.AppUser.CreditCards[0]">Change</a>
+                            </label>
+                            <p>@ViewBag.Message</p>
+                        </div>
+                    <div>
+                        <a asp-controller="CreditCard" asp-action="Create" class="btn btn-info">Add Card</a>
+                    </div>
+                    </div>
+                    }
+
+                    @if(Model.AppUser.CreditCards.Count == 2)
+                    {
+                    <div class="col-sm-20">
+                        <div class="form-group">
+                            <label class="radio">
+                                @Html.RadioButton("SelectedCreditCard", 1, true) @ViewBag.CC1 |
+                                <a asp-controller="CreditCard" asp-action="Edit" asp-route-id="@ViewBag.CC1ID">Change</a>
+                            </label>
+                            <label class="radio">
+                                @Html.RadioButton("SelectedCreditCard", 2) @ViewBag.CC2 |
+                                <a asp-controller="CreditCard" asp-action="Edit" asp-route-id="@ViewBag.CC2ID">Change</a>
+                            </label>
+                            <p>@ViewBag.Message</p>
+                        </div>
+                        <div>
+                            <a asp-controller="CreditCard" asp-action="Create" class="btn btn-info">Add Card</a>
+                        </div>
+                    </div>
+                    }
+
+                    @if(Model.AppUser.CreditCards.Count == 3)
+                    {
+                    <div class="row">
+                        <div class="col-sm-20">
+                            <div class="form-group">
+                                <label class="radio">
+                                    @Html.RadioButton("SelectedCreditCard", 1, true) @ViewBag.CC1 |
+                                    <a asp-controller="CreditCard" asp-action="Edit" asp-route-id="@ViewBag.CC1ID">Change</a>
+                                </label>
+                                <label class="radio">
+                                    @Html.RadioButton("SelectedCreditCard", 2) @ViewBag.CC2 |
+                                    <a asp-controller="CreditCard" asp-action="Edit" asp-route-id="@ViewBag.CC2ID">Change</a>
+                                </label>
+                                <label class="radio">
+                                    @Html.RadioButton("SelectedCreditCard", 3) @ViewBag.CC3 |
+                                    <a asp-controller="CreditCard" asp-action="Edit" asp-route-id="@ViewBag.CC3ID">Change</a>
+                                </label>
+                                <p>@ViewBag.Message</p>
+                            </div>
+                        </div>
+                    </div>
+                    }
+                </div>
+            </fieldset>
+            
+            <div class="form-group">
+                <input type="submit" value="Proceed to Order Summary" class="btn btn-warning" />
+            </div>
+        </form>
+    </div>
+    </div>
+    </div>
+</div>
+

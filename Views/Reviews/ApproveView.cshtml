@@ -1,0 +1,22 @@
+﻿@model Group14_BevoBooks.Models.Review
+
+@{
+    ViewData["Title"] = "ApproveView";
+}
+
+<h2>You Have Approved This Review</h2>
+<div>
+    <h4>Review</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ReviewText)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ReviewText)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
