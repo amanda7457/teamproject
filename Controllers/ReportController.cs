@@ -1,5 +1,4 @@
 ﻿using System;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -24,7 +23,7 @@ namespace Group14_BevoBooks.Controllers
 
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             return View();
         }
@@ -73,6 +72,13 @@ namespace Group14_BevoBooks.Controllers
             ViewBag.ReportCount = allcustomers.Count();
 
             return View(allcustomers);
+        }
+
+        public IActionResult Totals()
+        {
+            //total cost, total profit and total revenue -> get all od and all books???
+            List<Book> allbooks = 
+
         }
 
     }

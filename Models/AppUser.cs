@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 
 namespace Group14_BevoBooks.Models
 {
@@ -44,11 +45,25 @@ namespace Group14_BevoBooks.Models
         public List<Order> Orders { get; set; }
         public List<CreditCard> CreditCards { get; set; }
 
-		[InverseProperty("Author")]
+        [InverseProperty("Author")]
         public List<Review> ReviewsWritten { get; set; }
 
-		[InverseProperty("Approver")]
+        [InverseProperty("Approver")]
         public List<Review> ReviewsApproved { get; set; }
+
+        [Display(Name = "Customer Profit Margin")]
+        [DisplayFormat(DataFormatString = "{0:C}")]
+        public Decimal UserProfitMargin
+        {
+            get { return Orders.Sum(od => od.OrderProfitMargin); }
+        }
+
+        [Display(Name = "Total Revenue")]
+        [DisplayFormat(DataFormatString = "{0:C}")]
+        public Decimal TotalRevenue
+        {
+            get { return Orders.Sum(od => od.OrderSubtotal); }
+        }
 
         public AppUser()
         {
@@ -64,7 +79,7 @@ namespace Group14_BevoBooks.Models
 
             if (ReviewsWritten == null)
             {
-               ReviewsWritten = new List<Review>();
+                ReviewsWritten = new List<Review>();
             }
 
             if (ReviewsApproved == null)
