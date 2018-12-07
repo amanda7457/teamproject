@@ -46,6 +46,7 @@ namespace Group14_BevoBooks.Models
 
 
         [Display(Name = "Average Rating")]
+        [DisplayFormat(DataFormatString = "{0:0.#}")]
         public Decimal decAverageRating
         {
             get 
