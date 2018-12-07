@@ -1,0 +1,56 @@
+﻿@using Group14_BevoBooks.Models
+@model IEnumerable<Group14_BevoBooks.Models.AppUser>
+@{
+    ViewData["Title"] = "Report - Reviews";
+}
+<h2>Employee Review Approval Report</h2>
+
+<form asp-action="ReviewsReport" asp-controller="Report">
+    <div class="form-group">
+        <label>Sort By:</label>
+        @Html.DropDownList("SelectedSort", (SelectList)ViewBag.ReviewSort, new { @class = "form-control" })
+    </div>
+    <button type="submit" class="btn btn-dark">Sort Results</button>
+</form>
+<div>
+    <p>@ViewBag.ReportCount Results</p>
+</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Employee Username
+            </th>
+            <th>
+                Employee
+            </th>
+            <th>
+                Reviews Approved
+            </th>
+            <th>
+                Reviews Rejected
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FirstName)
+                    @Html.DisplayFor(modelItem => item.LastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CountReviewsApproved)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CountReviewsRejected)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

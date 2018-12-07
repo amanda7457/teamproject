@@ -48,6 +48,22 @@ namespace Group14_BevoBooks.Models
         [InverseProperty("Author")]
         public List<Review> ReviewsWritten { get; set; }
 
+        public Int32 CountReviewsApproved
+        {
+            get
+            {
+                return ReviewsApproved.Where(r => r.Approved == true).Count();
+            }
+        }
+
+        public Int32 CountReviewsRejected
+        {
+            get
+            {
+                return ReviewsApproved.Where(r => r.Approved == false).Count();
+            }
+        }
+
         [InverseProperty("Approver")]
         public List<Review> ReviewsApproved { get; set; }
 

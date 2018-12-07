@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Group14_BevoBooks.DAL;
 using Group14_BevoBooks.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -13,18 +14,24 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Group14_BevoBooks.Controllers
 {
+    //TODO: make sort better???
     [Authorize(Roles = "Manager")]
     public class ReportController : Controller
     {
         public enum BookSort { MostRecent, ProfitMarginA, ProfitMarginD, PriceA, PriceD, MostPopular };
         public enum OrderSort { MostRecent, ProfitMarginA, ProfitMarginD, PriceA, PriceD };
         public enum CustomerSort { ProfitMarginA, ProfitMarginD, RevenueA, RevenueD };
+        public enum ReviewSort { IDAscending, NumberApprovedsA, NumberApprovedsD, NumberRejectedA, NumberRejectedD };
 
         private AppDbContext _context;
+        private UserManager<AppUser> _userManager;
+        private RoleManager<IdentityRole> _roleManager;
 
-        public ReportController(AppDbContext context)
+        public ReportController(AppDbContext context, UserManager<AppUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             _context = context;
+            _userManager = userManager;
+            _roleManager = roleManager;
 
         }
 
@@ -34,7 +41,6 @@ namespace Group14_BevoBooks.Controllers
         }
 
 
-        //TODO: Sorting options: most recent first, profit margin (ascending and descending), price (ascending and descending), and most popular (highest quantity sold).
         public IActionResult AllBooksSold(int? SelectedSort)
         {
             List<Order> ordersplaced = _context.Orders.Include(b => b.AppUser).Include(m => m.OrderDetails).ThenInclude(m => m.Book).
@@ -50,6 +56,11 @@ namespace Group14_BevoBooks.Controllers
                     allorderdetails.Add(od);
                 }
             }
+
+            SetCost(allorderdetails);
+            SetProfitMargin(allorderdetails);
+
+            _context.SaveChanges();
 
             if (SelectedSort == 0)
             {
@@ -108,7 +119,6 @@ namespace Group14_BevoBooks.Controllers
             }
 
 
-
             ViewBag.ReportCount = allorderdetails.Count();
             ViewBag.BookSort = GetBookSort();
 
@@ -121,6 +131,20 @@ namespace Group14_BevoBooks.Controllers
             List<Order> ordersplaced = _context.Orders.Include(b => b.AppUser).Include(m => m.OrderDetails).ThenInclude(m => m.Book).
                 ThenInclude(b => b.Genre).Where(o => o.OrderPlaced == true).ToList();
 
+            List<OrderDetail> allorderdetails = new List<OrderDetail>();
+
+            foreach (Order o in ordersplaced)
+            {
+                foreach (OrderDetail od in o.OrderDetails)
+                {
+                    allorderdetails.Add(od);
+                }
+            }
+
+            SetCost(allorderdetails);
+            SetProfitMargin(allorderdetails);
+
+            _context.SaveChanges();
 
             if (SelectedSort == 0)
             {
@@ -261,7 +285,75 @@ namespace Group14_BevoBooks.Controllers
             return View(booksinventory);
         }
 
-        //TODO: add review report and make sort look better????
+        public IActionResult ReviewsReport(int? SelectedSort)
+        {
+            List<AppUser> people = _context.Users.Include(u => u.ReviewsApproved).ToList();
+
+            //users who have approved reviews
+            List<AppUser> havewrittenreviews = new List<AppUser>();
+            foreach (AppUser u in people)
+            {
+                List<Review> reviews = u.ReviewsApproved.ToList();
+                int count = reviews.Count();
+
+                if (count >= 1)
+                {
+                    havewrittenreviews.Add(u);
+                }
+            }
+
+            if (SelectedSort == 0)
+            {
+                List<AppUser> Sorted = havewrittenreviews.OrderBy(o => o.UserName).ToList();
+
+                ViewBag.ReportCount = havewrittenreviews.Count();
+                ViewBag.ReviewSort = GetReviewSort();
+                return View(Sorted);
+            }
+
+            if (SelectedSort == 1)
+            {
+                List<AppUser> Sorted = havewrittenreviews.OrderBy(o => o.CountReviewsApproved).ToList();
+
+                ViewBag.ReportCount = havewrittenreviews.Count();
+                ViewBag.ReviewSort = GetReviewSort();
+                return View(Sorted);
+            }
+
+            if (SelectedSort == 2)
+            {
+                List<AppUser> Sorted = havewrittenreviews.OrderByDescending(o => o.CountReviewsApproved).ToList();
+
+                ViewBag.ReportCount = havewrittenreviews.Count();
+                ViewBag.ReviewSort = GetReviewSort();
+                return View(Sorted);
+            }
+
+            if (SelectedSort == 3)
+            {
+                List<AppUser> Sorted = havewrittenreviews.OrderBy(o => o.CountReviewsRejected).ToList();
+
+                ViewBag.ReportCount = havewrittenreviews.Count();
+                ViewBag.ReviewSort = GetReviewSort();
+                return View(Sorted);
+            }
+
+            if (SelectedSort == 4)
+            {
+                List<AppUser> Sorted = havewrittenreviews.OrderByDescending(o => o.CountReviewsRejected).ToList();
+
+                ViewBag.ReportCount = havewrittenreviews.Count();
+                ViewBag.ReviewSort = GetReviewSort();
+                return View(Sorted);
+            }
+
+
+            ViewBag.ReportCount = havewrittenreviews.Count();
+            ViewBag.ReviewSort = GetReviewSort();
+
+            return View(havewrittenreviews);
+
+        }
 
         public SelectList GetBookSort()
         {
@@ -291,6 +383,40 @@ namespace Group14_BevoBooks.Controllers
             SelectList sortselect = new SelectList(customersorts, "ID", "Name");
 
             return sortselect;
+        }
+
+        public SelectList GetReviewSort()
+        {
+            var reviewsorts = from ReviewSort b in Enum.GetValues(typeof(ReviewSort))
+                                select new { ID = (int)b, Name = b.ToString() };
+
+            SelectList sortselect = new SelectList(reviewsorts, "ID", "Name");
+
+            return sortselect;
+        }
+
+        public void SetCost(List<OrderDetail> ods)
+        {
+            //quantity * book.averageprice
+            foreach (OrderDetail od in ods)
+            {
+                decimal bookavgcost = od.Book.AverageCost;
+                int quantity = od.Quantity;
+
+                od.Cost = bookavgcost * quantity;
+            }
+        }
+
+
+        public void SetProfitMargin(List<OrderDetail> ods)
+        {
+            //extended price - cost
+            foreach (OrderDetail od in ods)
+            {
+                decimal odcost = od.Cost;
+
+                od.ProfitMargin = od.ExtendedPrice - odcost;
+            }
         }
     }
 }
