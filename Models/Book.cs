@@ -34,16 +34,19 @@ namespace Group14_BevoBooks.Models
         [Display(Name = "Author")]
         public String Author { get; set; }
 
+        [Range(0, Double.MaxValue, ErrorMessage = "The value must be greater than 0")]
         public Int32 Reorder { get; set; }
 
         public Boolean Active { get; set; }
 
+        [Range(0, Double.MaxValue, ErrorMessage = "The value must be greater than 0")]
         public Int32 Inventory { get; set; }
 
         [Display(Name = "Date Published")]
         [DataType(DataType.Date)]
         public DateTime PublishedDate { get; set; }
 
+        public Boolean Discontinued { get; set; }
 
         [Display(Name = "Average Rating")]
         public Decimal decAverageRating
