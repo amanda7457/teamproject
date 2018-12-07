@@ -235,34 +235,9 @@ namespace Group14_BevoBooks.Controllers
             return View(book);
         }
 
-        // GET: Book/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
 
-            var book = await _context.Books
-                .FirstOrDefaultAsync(m => m.BookID == id);
-            if (book == null)
-            {
-                return NotFound();
-            }
 
-            return View(book);
-        }
 
-        // POST: Book/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var book = await _context.Books.FindAsync(id);
-            _context.Books.Remove(book);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
 
         private bool BookExists(int id)
         {
