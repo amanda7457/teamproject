@@ -65,6 +65,7 @@ namespace Group14_BevoBooks.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> CreateReview([Bind("ReviewID,Rating,ReviewText, Author, Book")] Review review)
         {
 
@@ -92,9 +93,10 @@ namespace Group14_BevoBooks.Controllers
             }
             return View("Create", review);
         }
-            
+
 
         // GET: Reviews/Edit/5
+        [Authorize(Roles = "Employee, Manager")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -115,6 +117,7 @@ namespace Group14_BevoBooks.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Employee, Manager")]
         public async Task<IActionResult> Edit(int id, [Bind("ReviewID,Rating,ReviewText")] Review review)
         {
             if (id != review.ReviewID)
@@ -146,6 +149,7 @@ namespace Group14_BevoBooks.Controllers
         }
 
         // GET: Reviews/Delete/5
+        [Authorize(Roles = "Employee, Manager")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -169,6 +173,7 @@ namespace Group14_BevoBooks.Controllers
         // POST: Reviews/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Employee, Manager")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var review = await _context.Reviews.FindAsync(id);
@@ -182,6 +187,7 @@ namespace Group14_BevoBooks.Controllers
             return _context.Reviews.Any(e => e.ReviewID == id);
         }
 
+        [Authorize(Roles = "Employee, Manager")]
         public async Task<IActionResult> ApproveReview(int id)
         {
             Review review = _context.Reviews.Find(id);

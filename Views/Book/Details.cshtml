@@ -47,7 +47,32 @@
         <dd>
             @Html.DisplayFor(model => model.PublishedDate)
         </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.decAverageRating)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.decAverageRating)
+        </dd>
     </dl>
+</div>
+
+<div>
+    <table class="table table-hover">
+        <thead class="thead-dark">
+        <thead>
+            <tr>
+                <th>Reviews</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Review rd in Model.Reviews)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => rd.ReviewText)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
 </div>
 
 @ViewBag.Message
