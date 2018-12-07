@@ -9,6 +9,7 @@ using Group14_BevoBooks.DAL;
 using Group14_BevoBooks.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using System.Text;
 
 namespace Group14_BevoBooks.Controllers
 {
@@ -106,19 +107,49 @@ namespace Group14_BevoBooks.Controllers
 
             ViewBag.BookName = book.Title;
 
-            //find order in db
-            OrderDetail od = new OrderDetail();
-            od.Order = _context.Orders.Find(id);
+            //make sure we're not editing existing od
 
-            await _context.SaveChangesAsync();
+            Order order = _context.Orders.Include(o => o.OrderDetails).ThenInclude(o => o.Book).FirstOrDefault(o => o.OrderID == id);
+            List<Book> booksincart = new List<Book>();
+            foreach (OrderDetail orderdetail in order.OrderDetails)
+            {
+                booksincart.Add(orderdetail.Book);
+            }
 
-            TempData.Keep();
+            if (booksincart.Contains(book))
+            {
+                List<OrderDetail> odlist = _context.OrderDetails.Include(o => o.Order).Include(o => o.Book).
+                    Where(o => o.Order == order && o.Book == book).ToList();
 
+                foreach (OrderDetail ord in odlist)
+                {
+                    order.OrderDetails.Remove(ord);
+                }
 
-            return View(od);
+                OrderDetail od = new OrderDetail();
+
+                od.Order = order;
+
+                TempData.Keep();
+                _context.SaveChanges();
+
+                return View(od);
+            }
+
+            else
+            {
+                OrderDetail od = new OrderDetail();
+
+                od.Order = order;
+
+                await _context.SaveChangesAsync();
+
+                TempData.Keep();
+
+                return View(od);
+            }
         }
 
-        bool AlreadyInOrder;
         [Authorize]
         //POST: /Order/AddToCart
         [HttpPost]
@@ -127,56 +158,32 @@ namespace Group14_BevoBooks.Controllers
             int bookid = Convert.ToInt32(TempData["bookid"]);
             Book book = _context.Books.Find(bookid);
 
-            Order order = _context.Orders.FirstOrDefault(o => o.OrderID == od.Order.OrderID);
-            List<OrderDetail> odlist = order.OrderDetails.ToList();
-
-            //make sure book is not already in order, if it is add to existing od
-            foreach (OrderDetail orderdetail in odlist)
-            {
-                int id = orderdetail.Book.BookID;
-
-                if (id == book.BookID)
-                {
-                    AlreadyInOrder = true;
-                    orderdetail.Quantity = orderdetail.Quantity + Quantity;
-                }
-
-                else
-                {
-                    AlreadyInOrder = false;
-                }
-            }
-
-            if (AlreadyInOrder == false)
-            {
-                od.Book = book;
-                od.Order = order;
-
-                //quantity equal to selected quantity
-                od.Quantity = Quantity;
-
-                //set the product price for this detail equal to the current price
-                decimal price = book.SellingPrice;
-                od.Price = price;
-            }
-
-            //order not placed yet
-            od.Order.OrderPlaced = false;
-
-
-            //Order order = _context.Find(orderid);
+            Order order = _context.Orders.Include(o => o.OrderDetails).FirstOrDefault(o => o.OrderID == od.Order.OrderID);
+            //List<OrderDetail> odlist = order.OrderDetails.ToList();
 
             if (ModelState.IsValid)
             {
-                //check if book is in stock -- TODO probably need to add some more logic here
                 if (book.Inventory < Quantity)
                 {
                     ViewBag.Message = "We do not have enough books in stock - please add a lower quantity";
-                    return View(od);
+                    return RedirectToAction("AddToCart", new { id = od.Order.OrderID });
                 }
 
                 else //everything is going right
                 {
+                    od.Book = book;
+                    od.Order = order;
+
+                    //quantity equal to selected quantity
+                    od.Quantity = Quantity;
+
+                    //set the product price for this detail equal to the current price
+                    decimal price = book.SellingPrice;
+                    od.Price = price;
+
+                    //order not placed yet
+                    od.Order.OrderPlaced = false;
+
                     _context.OrderDetails.Add(od);
 
                     await _context.SaveChangesAsync();
@@ -260,6 +267,44 @@ namespace Group14_BevoBooks.Controllers
                     return View("Error", new string[] { "Order was not found" });
                 }
 
+
+                //if book goes out of stock or is discontinued take out of cart
+                StringBuilder outofstock = new StringBuilder();
+                List<Book> booksoutofstock = new List<Book>();
+
+                StringBuilder discontinued = new StringBuilder();
+                List<Book> discontinuedbooks = new List<Book>();
+
+                foreach (OrderDetail od in ods)
+                {
+                    int currentinventory = od.Book.Inventory;
+                    int quantityincart = od.Quantity;
+
+                    if (quantityincart > currentinventory)
+                    {
+                        outofstock.Append(od.Book.Title);
+                        order.OrderDetails.Remove(od);
+                        booksoutofstock.Add(od.Book);
+                    }
+
+                    if (od.Book.Discontinued == true)
+                    {
+                        discontinued.Append(od.Book.Title);
+                        order.OrderDetails.Remove(od);
+                        discontinuedbooks.Add(od.Book);
+                    }
+                }
+
+                if (booksoutofstock.Count() >= 1)
+                {
+                    ViewBag.OutOfStock = outofstock + " out of stock and removed from your cart.";
+                }
+
+                if (discontinuedbooks.Count() >= 1)
+                {
+                    ViewBag.Discontinued = discontinued + " discontinued and removed from your cart.";
+                }
+
                 //make sure prices that are shows are the most updated
                 foreach (OrderDetail od in ods)
                 {
@@ -273,19 +318,19 @@ namespace Group14_BevoBooks.Controllers
                 decimal shippingfirst = shipping.ShippingFirst;
                 decimal shippingadditional = shipping.ShippingAdditional;
 
-                if (ods.Count < 1)
+                if (ods.Sum(od => od.Quantity) < 1)
                 {
                     order.OrderShipping = 0;
                 }
 
-                if (ods.Count == 1)
+                if (ods.Sum(od => od.Quantity) == 1)
                 {
                     order.OrderShipping = shippingfirst;
                 }
 
-                if (ods.Count > 1)
+                if (ods.Sum(od => od.Quantity) > 1)
                 {
-                    int additionalbooks = ods.Count - 1;
+                    int additionalbooks = ods.Sum(od => od.Quantity) - 1;
 
                     order.OrderShipping = shippingfirst + (shippingadditional * additionalbooks);
                 }
@@ -303,6 +348,16 @@ namespace Group14_BevoBooks.Controllers
         {
             Order order = _context.Orders.Include(o => o.AppUser).Include(o => o.OrderDetails).
                                   ThenInclude(o => o.Book).FirstOrDefault(o => o.OrderID == id);
+
+            if (User.IsInRole("Manager") == false && order.AppUser.UserName != User.Identity.Name)
+            {
+                return View("Error", new string[] { "You are not authorized to view this order!" });
+            }
+
+            if (order == null)
+            {
+                return View("Error", new string[] { "Order was not found" });
+            }
 
             ViewBag.BookCount = GetBookCount(id);
 
@@ -458,6 +513,16 @@ namespace Group14_BevoBooks.Controllers
             Order order = _context.Orders.Include(o => o.AppUser).Include(o => o.OrderDetails).
                                   ThenInclude(o => o.Book).FirstOrDefault(o => o.OrderID == ordernumber);
 
+            if (User.IsInRole("Manager") == false && order.AppUser.UserName != User.Identity.Name)
+            {
+                return View("Error", new string[] { "You are not authorized to view this order!" });
+            }
+
+            if (order == null)
+            {
+                return View("Error", new string[] { "Order was not found" });
+            }
+
             List<CreditCard> userccs = GetCards();
 
             switch (SelectedCreditCard)
@@ -490,6 +555,16 @@ namespace Group14_BevoBooks.Controllers
         {
             Order order = _context.Orders.Include(o => o.AppUser).Include(o => o.CreditCard).Include(o => o.OrderDetails).
                                   ThenInclude(o => o.Book).FirstOrDefault(o => o.OrderID == id);
+
+            if (User.IsInRole("Manager") == false && order.AppUser.UserName != User.Identity.Name)
+            {
+                return View("Error", new string[] { "You are not authorized to view this order!" });
+            }
+
+            if (order == null)
+            {
+                return View("Error", new string[] { "Order was not found" });
+            }
 
             ViewBag.BookCount = GetBookCount(id);
 

@@ -278,7 +278,7 @@ namespace Group14_BevoBooks.Controllers
 
             //all orders for person logged in
             orderlist = _context.Orders.Include(o => o.AppUser).Include(m => m.OrderDetails).ThenInclude(o => o.Book).
-                Where(o => o.AppUser == user).ToList();
+                Where(o => o.AppUser == user && o.OrderPlaced == true).ToList();
 
             List<OrderDetail> orderdetails = new List<OrderDetail>();
 

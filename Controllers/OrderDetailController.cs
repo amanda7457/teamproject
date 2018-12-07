@@ -88,6 +88,8 @@ namespace Group14_BevoBooks.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("OrderDetailID,Quantity,Price")] OrderDetail orderDetail)
         {
+            int quantity = orderDetail.Quantity;
+
             if (id != orderDetail.OrderDetailID)
             {
                 return NotFound();
@@ -95,8 +97,17 @@ namespace Group14_BevoBooks.Controllers
 
             if (ModelState.IsValid)
             {
+                orderDetail = _context.OrderDetails.Include(o => o.Book).FirstOrDefault(o => o.OrderDetailID == id);
+
                 try
                 {
+                    if (orderDetail.Book.Inventory < quantity)
+                    {
+                        ViewBag.Message = "We do not have enough books in stock - please add a lower quantity";
+                        return View(orderDetail);
+                    }
+
+                    orderDetail.Quantity = quantity;
                     _context.Update(orderDetail);
                     await _context.SaveChangesAsync();
                 }
