@@ -91,7 +91,6 @@ namespace Group14_BevoBooks.Controllers
                 alreadyincart = false;
             }
 
-
             //different views depending on role
             if (User.IsInRole("Employee"))
             {
@@ -103,7 +102,7 @@ namespace Group14_BevoBooks.Controllers
             }
 
 
-            Boolean seereviewdetail = CanSeeReview(id);
+            Boolean seereviewdetail = CanSeeReview(id, book);
 
             if (seereviewdetail == true)
             {
@@ -270,9 +269,10 @@ namespace Group14_BevoBooks.Controllers
             return _context.Books.Any(e => e.BookID == id);
         }
 
-        public Boolean CanSeeReview(int? bookid)
+        public Boolean CanSeeReview(int? bookid, Book bookdetail)
         {
-            AppUser user = _context.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+            AppUser user = _context.Users.Include(u => u.ReviewsWritten).ThenInclude(u => u.Book).
+                        FirstOrDefault(u => u.UserName == User.Identity.Name);
 
             List<Order> orderlist = new List<Order>();
 
@@ -301,18 +301,32 @@ namespace Group14_BevoBooks.Controllers
                 books.Add(od.Book);
             }
 
-            Book book = _context.Books.Find(bookid);
+            List<Review> reviewswritten = user.ReviewsWritten.ToList();
 
-            if (books.Contains(book))
+            List<Book> booksreviewed = new List<Book>();
+            foreach (Review r in reviewswritten)
             {
-                return true;
+                Book b = r.Book;
+                booksreviewed.Add(b);
             }
 
+            Book book = _context.Books.Find(bookid);
+            if (booksreviewed.Contains(bookdetail))
+            {
+                if (books.Contains(book))
+                {
+                    return true;
+                }
+
+                else
+                {
+                    return false;
+                }
+            }
             else
             {
                 return false;
             }
-
         }
 
         public int AlreadyInCart()
