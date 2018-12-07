@@ -269,7 +269,7 @@ namespace Group14_BevoBooks.Controllers
             return _context.Books.Any(e => e.BookID == id);
         }
 
-        public Boolean CanSeeReview(int? bookid, Book bookdetail)
+        public Boolean CanSeeReview(int? bookid)
         {
             AppUser user = _context.Users.Include(u => u.ReviewsWritten).ThenInclude(u => u.Book).
                         FirstOrDefault(u => u.UserName == User.Identity.Name);
@@ -311,22 +311,22 @@ namespace Group14_BevoBooks.Controllers
             }
 
             Book book = _context.Books.Find(bookid);
-            if (booksreviewed.Contains(bookdetail))
-            {
-                if (books.Contains(book))
-                {
-                    return true;
-                }
 
-                else
-                {
-                    return false;
-                }
+            //make a list of books i'be bought and haven't reviewed
+            List<Book> result = books.Except(booksreviewed).ToList();
+
+            if (result.Contains(book))
+            {
+                return true;
             }
+
             else
             {
                 return false;
             }
+
+
+
         }
 
         public int AlreadyInCart()
