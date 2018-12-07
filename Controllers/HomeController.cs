@@ -93,6 +93,10 @@ namespace Group14_BevoBooks.Controllers
                 {
                     b.Active = true;
                 }
+                if (b.Discontinued == true)
+                {
+                    b.Active = false;
+                }
                 else
                 {
                     b.Active = false;
