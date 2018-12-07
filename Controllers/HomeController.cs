@@ -89,17 +89,13 @@ namespace Group14_BevoBooks.Controllers
 
             foreach (Book b in allbooks)
             {
-                if (b.Inventory >= 1)
-                {
-                    b.Active = true;
-                }
-                if (b.Discontinued == true)
+                if (b.Inventory < 1 || b.Discontinued == true)
                 {
                     b.Active = false;
                 }
                 else
                 {
-                    b.Active = false;
+                    b.Active = true;
                 }
             }
 

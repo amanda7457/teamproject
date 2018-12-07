@@ -1,3 +1,4 @@
+@using Group14_BevoBooks.Models
 @model Group14_BevoBooks.Models.Discount
 
 @{
@@ -18,10 +19,18 @@
             @Html.DisplayFor(model => model.PromoCode)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.DiscountAmount)
+            Discount Amount
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.DiscountAmount)
+            @if (Model.DiscountType == DiscountType.FreeShipping)
+            {
+                @Html.DisplayFor(model => model.DiscountAmountShipping)
+            }
+            @if (Model.DiscountType == DiscountType.PercentOff)
+            {
+                @Html.DisplayFor(model => model.DiscountAmountPercent)
+            }
+
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.DiscountStartDate)

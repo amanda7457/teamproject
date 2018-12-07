@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<Group14_BevoBooks.Models.Discount>
+@using Group14_BevoBooks.Models
 
 @{
     ViewData["Title"] = "Index";
@@ -16,7 +17,7 @@
                     @Html.DisplayNameFor(model => model.PromoCode)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.DiscountAmount)
+                    Discount Amount
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.DiscountType)
@@ -32,7 +33,14 @@
                     @Html.DisplayFor(modelItem => item.PromoCode)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.DiscountAmount)
+                @if (item.DiscountType == DiscountType.FreeShipping)
+                {
+                     @Html.DisplayFor(modelItem => item.DiscountAmountShipping)
+                }
+                @if (item.DiscountType == DiscountType.PercentOff)
+                {
+                     @Html.DisplayFor(modelItem => item.DiscountAmountPercent)
+                }
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.DiscountType)

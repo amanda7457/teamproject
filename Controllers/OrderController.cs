@@ -189,7 +189,7 @@ namespace Group14_BevoBooks.Controllers
                 }
             }
 
-            return View("Index", "Book");
+            return View(od);
         }
 
         public Int32 GetOrderNumber()
@@ -381,9 +381,24 @@ namespace Group14_BevoBooks.Controllers
             {
                 //find discount in db
                 Discount discount = _context.Discounts.FirstOrDefault(d => d.PromoCode == promocodeinput);
-                Decimal discountamount = discount.DiscountAmount;
 
-                if(discount.Active == false)
+                Decimal discountamount;
+                if (discount.DiscountType == DiscountType.FreeShipping)
+                {
+                    discountamount = discount.DiscountAmountShipping;
+                }
+
+                if (discount.DiscountType == DiscountType.PercentOff)
+                {
+                    discountamount = discount.DiscountAmountShipping;
+                }
+
+                else
+                {
+                    discountamount = -1;
+                }
+
+                if (discount.Active == false)
                 {
                     ViewBag.PromoMessage = promocodeinput + " code is not currently active - please try again";
                     return View("Checkout", order);

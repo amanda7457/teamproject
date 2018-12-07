@@ -1,5 +1,5 @@
 @model Group14_BevoBooks.Models.Discount
-
+@using Group14_BevoBooks.Models
 @{
     ViewData["Title"] = "Edit";
 }
@@ -18,11 +18,22 @@
                 <input asp-for="PromoCode" class="form-control" />
                 <span asp-validation-for="PromoCode" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="DiscountAmount" class="control-label"></label>
-                <input asp-for="DiscountAmount" class="form-control" />
-                <span asp-validation-for="DiscountAmount" class="text-danger"></span>
-            </div>
+                @if (Model.DiscountType == DiscountType.FreeShipping)
+                {
+                    <div class="form-group">
+                        <label asp-for="DiscountAmountShipping" class="control-label"></label>
+                        <input asp-for="DiscountAmountShipping" class="form-control" />
+                        <span asp-validation-for="DiscountAmountShipping" class="text-danger"></span>
+                    </div>
+                }
+                @if (Model.DiscountType == DiscountType.PercentOff)
+                {
+                    <div class="form-group">
+                        <label asp-for="DiscountAmountPercent" class="control-label"></label>
+                        <input asp-for="DiscountAmountPercent" class="form-control" />
+                        <span asp-validation-for="DiscountAmountPercent" class="text-danger"></span>
+                    </div>
+                }
             <div class="form-group">
                 <label asp-for="DiscountStartDate" class="control-label"></label>
                 <input asp-for="DiscountStartDate" class="form-control" />

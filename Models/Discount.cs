@@ -15,9 +15,15 @@ namespace Group14_BevoBooks.Models
         [Display(Name = "Discount Code")]
         public string PromoCode { get; set; }
 
-        [Display(Name = "Discount Amount")]
+        [Display(Name = "Discount Amount (Free Shipping)")]
+        [DisplayFormat(DataFormatString = "{0:C}")]
         [Range(0, Double.MaxValue, ErrorMessage = "The value must be greater than 0")]
-        public Decimal DiscountAmount { get; set; }
+        public Decimal DiscountAmountShipping { get; set; }
+
+        [Display(Name = "Discount Amount (Percent Off)")]
+        [DisplayFormat(DataFormatString = "{0:P2}")]
+        [Range(0, 100, ErrorMessage = "The percentage must be between 1 and 100")]
+        public Decimal DiscountAmountPercent { get; set; }
 
         [Display(Name = "Start Date")]
         [DataType(DataType.Date)]

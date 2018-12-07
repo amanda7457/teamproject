@@ -1,10 +1,11 @@
+@using Group14_BevoBooks.Models
 @model IEnumerable<Group14_BevoBooks.Models.Discount>
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<h2>Index</h2>
+<h2>Coupon Codes</h2>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -16,7 +17,7 @@
                 @Html.DisplayNameFor(model => model.PromoCode)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DiscountAmount)
+                Discount Amount
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.DiscountStartDate)
@@ -40,7 +41,14 @@
                 @Html.DisplayFor(modelItem => item.PromoCode)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.DiscountAmount)
+                @if (item.DiscountType == DiscountType.FreeShipping)
+                {
+                     @Html.DisplayFor(modelItem => item.DiscountAmountShipping)
+                }
+                @if (item.DiscountType == DiscountType.PercentOff)
+                {
+                     @Html.DisplayFor(modelItem => item.DiscountAmountPercent)
+                }
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.DiscountStartDate)
@@ -56,7 +64,6 @@
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.DiscountID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.DiscountID">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.DiscountID">Delete</a>
             </td>
         </tr>

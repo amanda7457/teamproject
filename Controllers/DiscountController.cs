@@ -24,6 +24,23 @@ namespace Group14_BevoBooks.Controllers
         // GET: Discount
         public async Task<IActionResult> Index()
         {
+            DateTime today = System.DateTime.Today;
+
+            List<Discount> discountlist = _context.Discounts.ToList();
+
+            foreach (Discount d in discountlist)
+            {
+                if (d.DiscountEndDate.Date >= today.Date && d.DiscountStartDate.Date <= today.Date)
+                {
+                    d.Active = true;
+                }
+
+                else
+                {
+                    d.Active = false;
+                }
+            }
+
             return View(await _context.Discounts.ToListAsync());
         }
 
@@ -122,11 +139,30 @@ namespace Group14_BevoBooks.Controllers
             return View(discount);
         }
 
-        public IActionResult CreateDiscount(int? DiscountID, Decimal DiscountAmount)
+        public IActionResult CreateDiscountShipping(int? DiscountID, Decimal DiscountAmountShipping, bool? freeshipping)
         {
             Discount discount = _context.Discounts.Find(DiscountID);
 
-            discount.DiscountAmount = DiscountAmount;
+            if (freeshipping == true)
+            {
+                discount.DiscountAmountShipping = 0;
+            }
+
+            else
+            {
+                discount.DiscountAmountShipping = DiscountAmountShipping;
+            }
+
+            _context.SaveChanges();
+
+            return View("Confirm");
+        }
+
+        public IActionResult CreateDiscountPercent(int? DiscountID, Decimal DiscountAmountPercent)
+        {
+            Discount discount = _context.Discounts.Find(DiscountID);
+
+            discount.DiscountAmountPercent = DiscountAmountPercent;
 
             _context.SaveChanges();
 
