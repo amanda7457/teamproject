@@ -24,7 +24,7 @@ namespace Group14_BevoBooks.Controllers
     {
 
         private AppDbContext _db;
-        public DetailedSearchController (AppDbContext context)
+        public DetailedSearchController(AppDbContext context)
         {
             _db = context;
         }
@@ -126,7 +126,7 @@ namespace Group14_BevoBooks.Controllers
                     break;
             }
 
-            switch(SelectedAuthorOrder)
+            switch (SelectedAuthorOrder)
             {
                 case AuthorOrder.Descending:
                     query = query.OrderByDescending(c => c.Author);
@@ -134,9 +134,9 @@ namespace Group14_BevoBooks.Controllers
                 case AuthorOrder.Ascending:
                     query = query.OrderBy(c => c.Author);
                     break;
-                /*default:
-                    query = query.OrderByDescending(c => c.Author);
-                    break;*/
+                    /*default:
+                        query = query.OrderByDescending(c => c.Author);
+                        break;*/
             }
 
             switch (SelectedPopularityOrder)
@@ -147,9 +147,9 @@ namespace Group14_BevoBooks.Controllers
                 case PopularityOrder.Ascending:
                     query = query.OrderBy(c => c.intPopularity);
                     break;
-                /*default:
-                    query = query.OrderByDescending(c => c.intPopularity);
-                    break;*/
+                    /*default:
+                        query = query.OrderByDescending(c => c.intPopularity);
+                        break;*/
             }
             switch (SelectedReleaseOrder)
             {
@@ -159,9 +159,9 @@ namespace Group14_BevoBooks.Controllers
                 case ReleaseOrder.Ascending:
                     query = query.OrderBy(c => c.PublishedDate);
                     break;
-                /*default:
-                    query = query.OrderByDescending(c => c.PublishedDate);
-                    break;*/
+                    /*default:
+                        query = query.OrderByDescending(c => c.PublishedDate);
+                        break;*/
             }
             switch (SelectedRating)
             {
@@ -175,7 +175,7 @@ namespace Group14_BevoBooks.Controllers
 
             //This selects all the books
             List<Book> SelectedBooks = query.ToList();
-            SelectedBooks = query.Include(r => r.Genre).Include(r => r.Reviews).ToList();
+            SelectedBooks = query.Include(r => r.Genre).ToList();
             ViewBag.SelectedBooks = SelectedBooks.Count();
             ViewBag.TotalBooks = _db.Books.Count();
             //return View("SearchResult", SelectedBooks);
