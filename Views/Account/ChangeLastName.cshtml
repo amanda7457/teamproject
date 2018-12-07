@@ -10,7 +10,8 @@
     <div class="form-group">
         @Html.LabelFor(m => m.NewLastName, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
-            @Html.PasswordFor(m => m.NewLastName, new { @class = "form-control" })
+            @Html.TextBoxFor(m => m.NewLastName, new { @class = "form-control" })
         </div>
+        <button type="submit" class="btn btn-dark">Submit</button>
     </div>
 }

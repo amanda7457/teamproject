@@ -166,17 +166,23 @@ namespace Group14_BevoBooks.Controllers
 
         public ActionResult ChangeFirstName()
         {
-            return View();
+             ChangeFirstName cpn = new ChangeFirstName();
+
+            return View(cpn);
+
         }
 
         public ActionResult ChangeLastName()
         {
-            return View();
+            ChangeLastName cpn = new ChangeLastName();
+            return View(cpn);
         }
 
         public ActionResult ChangeEmail()
         {
-            return View();
+            ChangeEmail cpn = new ChangeEmail();
+            return View(cpn);
+
         }
 
         [HttpPost]
@@ -195,7 +201,7 @@ namespace Group14_BevoBooks.Controllers
             _db.Users.Update(userLoggedIn);
             _db.SaveChanges();
 
-            return View(model);
+            return RedirectToAction("Index");
         }
 
         [HttpPost]
@@ -214,7 +220,7 @@ namespace Group14_BevoBooks.Controllers
             _db.Users.Update(userLoggedIn);
             _db.SaveChanges();
 
-            return View(model);
+            return RedirectToAction("Index");
         }
 
         [HttpPost]
@@ -227,12 +233,13 @@ namespace Group14_BevoBooks.Controllers
             }
 
             AppUser userLoggedIn = await _userManager.FindByNameAsync(User.Identity.Name);
+            userLoggedIn.FirstName = model.NewFirstName;
 
             _db.Users.Update(userLoggedIn);
             _db.SaveChanges();
 
-            userLoggedIn.FirstName = model.NewFirstName;
-            return View(model);
+
+            return RedirectToAction("Index");
         }
 
             //Logic for change password
@@ -264,7 +271,8 @@ namespace Group14_BevoBooks.Controllers
 
         public ActionResult ChangeAddress()
         {
-            return View();
+            ChangeAddress cpn = new ChangeAddress();
+            return View(cpn);
         }
 
         [HttpPost]
@@ -278,10 +286,12 @@ namespace Group14_BevoBooks.Controllers
 
             AppUser userLoggedIn = await _userManager.FindByNameAsync(User.Identity.Name);
 
+            userLoggedIn.Address = model.NewAddress;
+
             _db.Users.Update(userLoggedIn);
             _db.SaveChanges();
 
-            userLoggedIn.Address = model.NewAddress;
+
             return View(model);
 
         }

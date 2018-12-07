@@ -29,6 +29,21 @@ namespace Group14_BevoBooks.Controllers
 
         }
 
+        public String GetOrderEmail()
+        {
+            IndexViewModel iv = new IndexViewModel();
+
+            //get user info
+            String id = User.Identity.Name;
+            AppUser user = _context.Users.FirstOrDefault(u => u.UserName == id);
+
+            string email = user.Email;
+
+            String OrderE;
+            OrderE = iv.Email;
+            return OrderE;
+        }
+
         public List<Book> ReccomendedBooks()
         {
             List<Book> reccomendedbooks = new List<Book>();
