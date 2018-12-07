@@ -22,4 +22,7 @@
     <ItemGroup>
       <None Include="Views\Report\Inventory.cshtml" />
     </ItemGroup>
+    <ItemGroup>
+      <Compile Remove="Migrations\20181130211353_InitialMigration.cs" />
+    </ItemGroup>
 </Project>

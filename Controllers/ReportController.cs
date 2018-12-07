@@ -14,7 +14,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Group14_BevoBooks.Controllers
 {
-    //TODO: make sort better???
     [Authorize(Roles = "Manager")]
     public class ReportController : Controller
     {

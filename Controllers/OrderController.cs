@@ -29,16 +29,20 @@ namespace Group14_BevoBooks.Controllers
         public async Task<IActionResult> Index()
         {
             List<Order> Orders = new List<Order>();
+            List<Order> sortedorders = new List<Order>();
 
             if (User.IsInRole("Customer"))
             {
                 Orders = _context.Orders.Include(m => m.OrderDetails).Where(o => o.AppUser.UserName == User.Identity.Name).ToList();
+                sortedorders = Orders.OrderByDescending(o => o.OrderDate).ToList();
+
             }
             else
             {
                 Orders = _context.Orders.Include(o => o.OrderDetails).ToList();
+                sortedorders = Orders.OrderByDescending(o => o.OrderDate).ToList();
             }
-            return View(Orders);
+            return View(sortedorders);
         }
 
         [Authorize]

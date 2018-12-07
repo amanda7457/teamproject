@@ -60,11 +60,13 @@ namespace Group14_BevoBooks.Migrations
                 {
                     DiscountID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    PromoCode = table.Column<string>(nullable: true),
-                    DiscountAmount = table.Column<decimal>(nullable: false),
+                    PromoCode = table.Column<string>(maxLength: 20, nullable: true),
+                    DiscountAmountShipping = table.Column<decimal>(nullable: false),
+                    DiscountAmountPercent = table.Column<decimal>(nullable: false),
                     DiscountStartDate = table.Column<DateTime>(nullable: false),
                     DiscountEndDate = table.Column<DateTime>(nullable: false),
-                    DiscountType = table.Column<int>(nullable: false)
+                    DiscountType = table.Column<int>(nullable: false),
+                    Active = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -196,8 +198,9 @@ namespace Group14_BevoBooks.Migrations
                 {
                     CreditCardID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    CardNumber = table.Column<string>(maxLength: 16, nullable: false),
-                    AppUserId = table.Column<string>(nullable: false)
+                    CardNumber = table.Column<string>(nullable: false),
+                    CardType = table.Column<int>(nullable: false),
+                    AppUserId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -207,7 +210,27 @@ namespace Group14_BevoBooks.Migrations
                         column: x => x.AppUserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ReorderQuantity",
+                columns: table => new
+                {
+                    DefaultReorderID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    DefaultQuantity = table.Column<int>(nullable: false),
+                    ManagerSetId = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ReorderQuantity", x => x.DefaultReorderID);
+                    table.ForeignKey(
+                        name: "FK_ReorderQuantity_AspNetUsers_ManagerSetId",
+                        column: x => x.ManagerSetId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -247,6 +270,8 @@ namespace Group14_BevoBooks.Migrations
                     Active = table.Column<bool>(nullable: false),
                     Inventory = table.Column<int>(nullable: false),
                     PublishedDate = table.Column<DateTime>(nullable: false),
+                    InStock = table.Column<bool>(nullable: false),
+                    Discontinued = table.Column<bool>(nullable: false),
                     GenreID = table.Column<int>(nullable: true),
                     UnqiueID = table.Column<int>(nullable: false)
                 },
@@ -272,6 +297,8 @@ namespace Group14_BevoBooks.Migrations
                     OrderPlaced = table.Column<bool>(nullable: false),
                     AppUserId = table.Column<string>(nullable: true),
                     DiscountID = table.Column<int>(nullable: true),
+                    CreditCardID = table.Column<int>(nullable: true),
+                    DefaultReorderID = table.Column<int>(nullable: true),
                     ShippingID = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
@@ -282,6 +309,18 @@ namespace Group14_BevoBooks.Migrations
                         column: x => x.AppUserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Orders_CreditCards_CreditCardID",
+                        column: x => x.CreditCardID,
+                        principalTable: "CreditCards",
+                        principalColumn: "CreditCardID",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Orders_ReorderQuantity_DefaultReorderID",
+                        column: x => x.DefaultReorderID,
+                        principalTable: "ReorderQuantity",
+                        principalColumn: "DefaultReorderID",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Orders_Discounts_DiscountID",
@@ -303,18 +342,34 @@ namespace Group14_BevoBooks.Migrations
                 {
                     BookOrderID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Quantity = table.Column<int>(nullable: false),
                     Status = table.Column<int>(nullable: false),
+                    Quantity = table.Column<int>(nullable: false),
+                    Price = table.Column<decimal>(nullable: false),
+                    InReorderList = table.Column<bool>(nullable: false),
+                    AppUserId = table.Column<string>(nullable: true),
+                    ReorderQuantityDefaultReorderID = table.Column<int>(nullable: true),
                     BookID = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_BookOrders", x => x.BookOrderID);
                     table.ForeignKey(
+                        name: "FK_BookOrders_AspNetUsers_AppUserId",
+                        column: x => x.AppUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
                         name: "FK_BookOrders_Books_BookID",
                         column: x => x.BookID,
                         principalTable: "Books",
                         principalColumn: "BookID",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_BookOrders_ReorderQuantity_ReorderQuantityDefaultReorderID",
+                        column: x => x.ReorderQuantityDefaultReorderID,
+                        principalTable: "ReorderQuantity",
+                        principalColumn: "DefaultReorderID",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -325,7 +380,8 @@ namespace Group14_BevoBooks.Migrations
                     ReviewID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Rating = table.Column<int>(nullable: false),
-                    ReviewText = table.Column<string>(nullable: true),
+                    ReviewText = table.Column<string>(maxLength: 100, nullable: true),
+                    Approved = table.Column<bool>(nullable: true),
                     AuthorId = table.Column<string>(nullable: true),
                     ApproverId = table.Column<string>(nullable: true),
                     BookID = table.Column<int>(nullable: true)
@@ -361,6 +417,8 @@ namespace Group14_BevoBooks.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Quantity = table.Column<int>(nullable: false),
                     Price = table.Column<decimal>(nullable: false),
+                    ProfitMargin = table.Column<decimal>(nullable: false),
+                    Cost = table.Column<decimal>(nullable: false),
                     OrderID = table.Column<int>(nullable: true),
                     BookID = table.Column<int>(nullable: true)
                 },
@@ -421,9 +479,19 @@ namespace Group14_BevoBooks.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_BookOrders_AppUserId",
+                table: "BookOrders",
+                column: "AppUserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_BookOrders_BookID",
                 table: "BookOrders",
                 column: "BookID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BookOrders_ReorderQuantityDefaultReorderID",
+                table: "BookOrders",
+                column: "ReorderQuantityDefaultReorderID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Books_GenreID",
@@ -451,6 +519,16 @@ namespace Group14_BevoBooks.Migrations
                 column: "AppUserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Orders_CreditCardID",
+                table: "Orders",
+                column: "CreditCardID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Orders_DefaultReorderID",
+                table: "Orders",
+                column: "DefaultReorderID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Orders_DiscountID",
                 table: "Orders",
                 column: "DiscountID");
@@ -459,6 +537,11 @@ namespace Group14_BevoBooks.Migrations
                 name: "IX_Orders_ShippingID",
                 table: "Orders",
                 column: "ShippingID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ReorderQuantity_ManagerSetId",
+                table: "ReorderQuantity",
+                column: "ManagerSetId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Reviews_ApproverId",
@@ -502,9 +585,6 @@ namespace Group14_BevoBooks.Migrations
                 name: "BookOrders");
 
             migrationBuilder.DropTable(
-                name: "CreditCards");
-
-            migrationBuilder.DropTable(
                 name: "OrderDetails");
 
             migrationBuilder.DropTable(
@@ -518,6 +598,12 @@ namespace Group14_BevoBooks.Migrations
 
             migrationBuilder.DropTable(
                 name: "Books");
+
+            migrationBuilder.DropTable(
+                name: "CreditCards");
+
+            migrationBuilder.DropTable(
+                name: "ReorderQuantity");
 
             migrationBuilder.DropTable(
                 name: "Discounts");

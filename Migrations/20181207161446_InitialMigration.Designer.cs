@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Group14_BevoBooks.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20181207042756_Migration20")]
-    partial class Migration20
+    [Migration("20181207161446_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -104,6 +104,8 @@ namespace Group14_BevoBooks.Migrations
                         .IsRequired();
 
                     b.Property<string>("Description");
+
+                    b.Property<bool>("Discontinued");
 
                     b.Property<int?>("GenreID");
 
@@ -209,7 +211,9 @@ namespace Group14_BevoBooks.Migrations
 
                     b.Property<bool>("Active");
 
-                    b.Property<decimal>("DiscountAmount");
+                    b.Property<decimal>("DiscountAmountPercent");
+
+                    b.Property<decimal>("DiscountAmountShipping");
 
                     b.Property<DateTime>("DiscountEndDate");
 
@@ -282,6 +286,8 @@ namespace Group14_BevoBooks.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int?>("BookID");
+
+                    b.Property<decimal>("Cost");
 
                     b.Property<int?>("OrderID");
 

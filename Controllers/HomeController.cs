@@ -26,8 +26,8 @@ namespace Group14_BevoBooks.Controllers
 
             if (User.Identity.IsAuthenticated)
             {
-                AppUser user = _context.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
-                ViewBag.Name = user.FirstName;
+                //AppUser user = _context.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+                //ViewBag.Name = user.FirstName;
             }
                 
             SetActive();
