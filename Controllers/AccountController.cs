@@ -159,7 +159,9 @@ namespace Group14_BevoBooks.Controllers
 
         public ActionResult ChangePhoneNumber()
         {
-            return View();
+            ChangePhoneNumber cpn = new ChangePhoneNumber();
+
+            return View(cpn);
         }
 
         public ActionResult ChangeFirstName()
@@ -189,6 +191,10 @@ namespace Group14_BevoBooks.Controllers
             AppUser userLoggedIn = await _userManager.FindByNameAsync(User.Identity.Name);
 
             userLoggedIn.Email = model.NewEmail;
+
+            _db.Users.Update(userLoggedIn);
+            _db.SaveChanges();
+
             return View(model);
         }
 
@@ -204,6 +210,10 @@ namespace Group14_BevoBooks.Controllers
             AppUser userLoggedIn = await _userManager.FindByNameAsync(User.Identity.Name);
 
             userLoggedIn.LastName = model.NewLastName;
+
+            _db.Users.Update(userLoggedIn);
+            _db.SaveChanges();
+
             return View(model);
         }
 
@@ -217,6 +227,9 @@ namespace Group14_BevoBooks.Controllers
             }
 
             AppUser userLoggedIn = await _userManager.FindByNameAsync(User.Identity.Name);
+
+            _db.Users.Update(userLoggedIn);
+            _db.SaveChanges();
 
             userLoggedIn.FirstName = model.NewFirstName;
             return View(model);
@@ -241,7 +254,11 @@ namespace Group14_BevoBooks.Controllers
             AppUser userLoggedIn = await _userManager.FindByNameAsync(User.Identity.Name);
 
             userLoggedIn.PhoneNumber = model.NewPhoneNumber;
-            return View(model);
+
+            _db.Users.Update(userLoggedIn);
+            _db.SaveChanges();
+
+            return RedirectToAction("Index");
 
         }
 
@@ -260,6 +277,9 @@ namespace Group14_BevoBooks.Controllers
             }
 
             AppUser userLoggedIn = await _userManager.FindByNameAsync(User.Identity.Name);
+
+            _db.Users.Update(userLoggedIn);
+            _db.SaveChanges();
 
             userLoggedIn.Address = model.NewAddress;
             return View(model);

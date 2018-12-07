@@ -101,17 +101,17 @@ namespace Group14_BevoBooks.Models
 
     public class ChangePhoneNumber
     {
-        [Required]
+        [Required(ErrorMessage = "Phone number is required")]
+        [RegularExpression("^[0-9]{10}$", ErrorMessage = "Phone number bust be 10 digits long")]
         [DataType(DataType.PhoneNumber)]
-        [Display(Name = "New Phone Number")]
-        public string NewPhoneNumber { get; set; }
+        [Display(Name = "Phone Number")]
+        public String NewPhoneNumber { get; set; }
 
     }
 
     public class ChangeFirstName
     {
         [Required]
-
         [Display(Name = "New Name")]
         public string NewFirstName { get; set; }
 
@@ -147,7 +147,7 @@ namespace Group14_BevoBooks.Models
         public String UserName { get; set; }
         public String Email { get; set; }
         public String UserID { get; set; }
-        public String NewPhoneNumber { get; set; }
+        public string NewPhoneNumber { get; set; }
         public String NewLastName { get; set; }
         public String NewFirstName { get; set; }
         public String NewEmail { get; set; }

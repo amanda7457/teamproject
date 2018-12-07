@@ -3,15 +3,14 @@
 <h2>Change Phone Number</h2>
 @using (Html.BeginForm("ChangePhoneNumber", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
 {
-    @Html.AntiForgeryToken()
     <h4>Change Phone Number</h4>
     <hr />
     @Html.ValidationSummary("", new { @class = "text-danger" })
     <div class="form-group">
         @Html.LabelFor(m => m.NewPhoneNumber, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
-            @Html.PasswordFor(m => m.NewPhoneNumber, new { @class = "form-control" })
+            @Html.TextBoxFor(m => m.NewPhoneNumber, new { @class = "form-control" })
         </div>
-
+        <button type="submit" class="btn btn-dark">Submit</button>
     </div>
 }
