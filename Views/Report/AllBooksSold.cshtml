@@ -1,12 +1,20 @@
 ﻿@using Group14_BevoBooks.Models
-
 @model IEnumerable<Group14_BevoBooks.Models.OrderDetail>
 @{
     ViewData["Title"] = "Report - All Books Sold";
 }
 
-<p>@ViewBag.ReportCount Results></p>
 <h2>All Books Report</h2>
+<form asp-action="AllBooksSold" asp-controller="Report">
+    <div class="form-group">
+        <label>Sort By:</label>
+        @Html.DropDownList("SelectedSort", (SelectList)ViewBag.BookSort, new { @class = "form-control" })
+    </div>
+    <button type="submit" class="btn btn-dark">Sort Results</button>
+</form>
+<div>
+    <p>@ViewBag.ReportCount Results</p>
+</div>
 <table class="table">
     <thead>
         <tr>
@@ -36,30 +44,30 @@
     <tbody>
         @foreach (var item in Model)
         {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Book.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Quantity)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Order.OrderID)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Order.AppUser.FirstName)
-                @Html.DisplayFor(modelItem => item.Order.AppUser.LastName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Book.AverageCost)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProfitMargin)
-            </td>
-        </tr>
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Book.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Quantity)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Order.OrderID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Order.AppUser.FirstName)
+                    @Html.DisplayFor(modelItem => item.Order.AppUser.LastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Book.AverageCost)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProfitMargin)
+                </td>
+            </tr>
         }
     </tbody>
 </table>

@@ -5,7 +5,18 @@
 }
 <h2>All Orders</h2>
 
-<p>@ViewBag.ReportCount Results></p>
+<form asp-action="AllOrders" asp-controller="Report">
+    <div class="form-group">
+        <label>Sort By:</label>
+        @Html.DropDownList("SelectedSort", (SelectList)ViewBag.OrderSort, new { @class = "form-control" })
+    </div>
+    <button type="submit" class="btn btn-dark">Sort Results</button>
+</form>
+
+<div>
+    <p>@ViewBag.ReportCount Results</p>
+</div>
+
 <table class="table">
     <thead>
         <tr>

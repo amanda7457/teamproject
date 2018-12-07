@@ -51,25 +51,26 @@ namespace Group14_BevoBooks.Controllers
                 }
             }
 
-            if (SelectedSort == 1)
+            if (SelectedSort == 0)
             {
-                List<OrderDetail> SortedRecent = allorderdetails.OrderBy(o => o.Order.OrderDate).ToList();
+                List<OrderDetail> SortedRecent = allorderdetails.OrderByDescending(o => o.Order.OrderDate).ToList();
 
                 ViewBag.ReportCount = allorderdetails.Count();
                 ViewBag.BookSort = GetBookSort();
                 return View(SortedRecent);
             }
 
-            if (SelectedSort == 2)
+            if (SelectedSort == 1)
             {
-                List<OrderDetail> SortedProfitA = allorderdetails.OrderBy(o => o.ProfitMargin).ToList();
+                List<OrderDetail> SortedProfitA = allorderdetails.OrderByDescending(o => o.ProfitMargin).ToList();
+                SortedProfitA.Reverse();
 
                 ViewBag.ReportCount = allorderdetails.Count();
                 ViewBag.BookSort = GetBookSort();
                 return View(SortedProfitA);
             }
 
-            if (SelectedSort == 3)
+            if (SelectedSort == 2)
             {
                 List<OrderDetail> SortedProfitD = allorderdetails.OrderByDescending(o => o.ProfitMargin).ToList();
 
@@ -78,16 +79,17 @@ namespace Group14_BevoBooks.Controllers
                 return View(SortedProfitD);
             }
 
-            if (SelectedSort == 4)
+            if (SelectedSort == 3)
             {
-                List<OrderDetail> SortedPriceA = allorderdetails.OrderBy(o => o.Price).ToList();
+                List<OrderDetail> SortedPriceA = allorderdetails.OrderByDescending(o => o.Price).ToList();
+                SortedPriceA.Reverse();
 
                 ViewBag.ReportCount = allorderdetails.Count();
                 ViewBag.BookSort = GetBookSort();
                 return View(SortedPriceA);
             }
 
-            if (SelectedSort == 5)
+            if (SelectedSort == 4)
             {
                 List<OrderDetail> SortedPriceD = allorderdetails.OrderByDescending(o => o.Price).ToList();
 
@@ -96,7 +98,7 @@ namespace Group14_BevoBooks.Controllers
                 return View(SortedPriceD);
             }
 
-            if (SelectedSort == 6)
+            if (SelectedSort == 5)
             {
                 List<OrderDetail> SortedPopularity = allorderdetails.OrderByDescending(o => o.Book.intPopularity).ToList();
 
@@ -114,10 +116,56 @@ namespace Group14_BevoBooks.Controllers
 
         }
 
-        public IActionResult AllOrders()
+        public IActionResult AllOrders(int? SelectedSort)
         {
             List<Order> ordersplaced = _context.Orders.Include(b => b.AppUser).Include(m => m.OrderDetails).ThenInclude(m => m.Book).
-                ThenInclude(b => b.Genre).Where(o => o.OrderPlaced == true && User.IsInRole("Customer")).ToList();
+                ThenInclude(b => b.Genre).Where(o => o.OrderPlaced == true).ToList();
+
+
+            if (SelectedSort == 0)
+            {
+                List<Order> SortedRecent = ordersplaced.OrderByDescending(o => o.OrderDate).ToList();
+
+                ViewBag.ReportCount = ordersplaced.Count();
+                ViewBag.OrderSort = GetOrderSort();
+                return View(SortedRecent);
+            }
+
+            if (SelectedSort == 1)
+            {
+                List<Order> Sorted = ordersplaced.OrderBy(o => o.OrderProfitMargin).ToList();
+
+                ViewBag.ReportCount = ordersplaced.Count();
+                ViewBag.OrderSort = GetOrderSort();
+                return View(Sorted);
+            }
+
+            if (SelectedSort == 2)
+            {
+                List<Order> Sorted = ordersplaced.OrderByDescending(o => o.OrderProfitMargin).ToList();
+
+                ViewBag.ReportCount = ordersplaced.Count();
+                ViewBag.OrderSort = GetOrderSort();
+                return View(Sorted);
+            }
+
+            if (SelectedSort == 3)
+            {
+                List<Order> Sorted = ordersplaced.OrderBy(o => o.OrderSubtotal).ToList();
+
+                ViewBag.ReportCount = ordersplaced.Count();
+                ViewBag.OrderSort = GetOrderSort();
+                return View(Sorted);
+            }
+
+            if (SelectedSort == 4)
+            {
+                List<Order> Sorted = ordersplaced.OrderByDescending(o => o.OrderSubtotal).ToList();
+
+                ViewBag.ReportCount = ordersplaced.Count();
+                ViewBag.OrderSort = GetOrderSort();
+                return View(Sorted);
+            }
 
 
             ViewBag.ReportCount = ordersplaced.Count();
@@ -126,11 +174,49 @@ namespace Group14_BevoBooks.Controllers
             return View(ordersplaced);
         }
 
-        public IActionResult AllCustomers()
+        public IActionResult AllCustomers(int? SelectedSort)
         {
 
             List<AppUser> allcustomers = _context.Users.Include(u => u.Orders).ThenInclude(o => o.OrderDetails)
                         .ThenInclude(od => od.Book).ToList();
+
+            if (SelectedSort == 0)
+            {
+                List<AppUser> Sorted = allcustomers.OrderBy(o => o.UserProfitMargin).ToList();
+
+                ViewBag.ReportCount = allcustomers.Count();
+                ViewBag.CustomerSort = GetCustomerSort();
+                return View(Sorted);
+            }
+
+            if (SelectedSort == 1)
+            {
+                List<AppUser> Sorted = allcustomers.OrderByDescending(o => o.UserProfitMargin).ToList();
+
+                ViewBag.ReportCount = allcustomers.Count();
+                ViewBag.CustomerSort = GetCustomerSort();
+                return View(Sorted);
+            }
+
+            if (SelectedSort == 2)
+            {
+                List<AppUser> Sorted = allcustomers.OrderBy(o => o.TotalRevenue).ToList();
+
+                ViewBag.ReportCount = allcustomers.Count();
+                ViewBag.CustomerSort = GetCustomerSort();
+                return View(Sorted);
+            }
+
+            if (SelectedSort == 3)
+            {
+                List<AppUser> Sorted = allcustomers.OrderByDescending(o => o.TotalRevenue).ToList();
+
+                ViewBag.ReportCount = allcustomers.Count();
+                ViewBag.CustomerSort = GetCustomerSort();
+                return View(Sorted);
+            }
+
+
 
             ViewBag.ReportCount = allcustomers.Count();
             ViewBag.CustomerSort = GetCustomerSort();

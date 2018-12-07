@@ -4,7 +4,20 @@
     ViewData["Title"] = "Report - All Customers";
 }
 <h2>All Customers</h2>
-<p>@ViewBag.ReportCount Results></p>
+
+
+
+<form asp-action="AllCustomers" asp-controller="Report">
+    <div class="form-group">
+        <label>Sort By:</label>
+        @Html.DropDownList("SelectedSort", (SelectList)ViewBag.CustomerSort, new { @class = "form-control" })
+    </div>
+    <button type="submit" class="btn btn-dark">Sort Results</button>
+</form>
+
+<div>
+    <p>@ViewBag.ReportCount Results</p>
+</div>
 <table class="table">
     <thead>
         <tr>
