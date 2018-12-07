@@ -84,6 +84,8 @@ namespace Group14_BevoBooks.Controllers
 
                 return RedirectToAction("Cart", "Order");
             }
+
+            ViewBag.CardList = GetCardTypes();
             return View(creditcard);
         }
 

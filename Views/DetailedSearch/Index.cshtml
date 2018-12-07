@@ -21,7 +21,33 @@
         <label>Choose a Genre:</label>
         @Html.DropDownList("SelectedGenre", (SelectList)ViewBag.AllGenres, new { @class = "form-control" })
     </div>
-    
+    <div class="form-group">
+        <label>Sort by Title:</label>
+        <label class="radio">@Html.RadioButton("SortSelected", SortOrder.TitleAscending) A to Z  </label>
+        <label class="radio">@Html.RadioButton("SortSelected", SortOrder.TitleDescending) Z to A </label>
+        <div class="text-danger">@ViewBag.Message</div>
+       
+        <label>Sort by Author:</label>
+        <label class="radio">@Html.RadioButton("SortSelected", SortOrder.AuthorDescending) A to Z  </label>
+        <label class="radio">@Html.RadioButton("SortSelected", SortOrder.AuthorAscending) Z to A </label>
+        <div class="text-danger">@ViewBag.Message</div>
+
+        <label>Sort by Popularity:</label>
+        <label class="radio">@Html.RadioButton("SortSelected", SortOrder.PopularityDescending) Low to High  </label>
+        <label class="radio">@Html.RadioButton("SortSelected", SortOrder.PopularityAscending) High to Low </label>
+        <div class="text-danger">@ViewBag.Message</div>
+
+        <label>Sort by Release Order:</label>
+        <label class="radio">@Html.RadioButton("SortSelected", SortOrder.RatingDescending) Most Recent  </label>
+        <label class="radio">@Html.RadioButton("SortSelected", SortOrder.ReleaseAscending) Least Recent </label>
+        <div class="text-danger">@ViewBag.Message</div>
+
+        <label>Sort by Rating:</label>
+        <label class="radio">@Html.RadioButton("SortSelected", SortOrder.RatingDescending) Highest Rated  </label>
+        <label class="radio">@Html.RadioButton("SortSelected", SortOrder.RatingAscending) Lowest Rated </label>
+        <div class="text-danger">@ViewBag.Message</div>
+    </div>
+
     <button type="submit" class="btn btn-danger">Search</button>
     <a asp-controller="Book" asp-action="Index" class="btn btn-danger">Show All Books</a>
 </form>

@@ -24,31 +24,6 @@ namespace Group14_BevoBooks.Controllers
             _context = context;
         }
 
-        // GET: CreditCard/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Shipping/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(int id, [Bind("ShippingID, ShippingFirst, ShippingAdditional")] Shipping shipping)
-        {
-            if (ModelState.IsValid)
-            {
-                AppUser user = _context.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
-                shipping.ManagerSet = user;
-
-                _context.ShippingPrices.Add(shipping);
-
-                await _context.SaveChangesAsync();
-                return RedirectToAction("Index", "Order");
-            }
-            return View(shipping);
-        }
 
         // GET: CreditCard/Edit/5
         public async Task<IActionResult> Edit(int? id)

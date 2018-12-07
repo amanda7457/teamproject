@@ -18,6 +18,9 @@ namespace Group14_BevoBooks.Controllers
     public enum PopularityOrder { Descending, Ascending }
     public enum ReleaseOrder { Descending, Ascending }
     public enum RatingOrder { Descending, Ascending }
+
+    public enum SortOrder { TitleAscending, TitleDescending, AuthorAscending, AuthorDescending, PopularityAscending, PopularityDescending, ReleaseAscending, ReleaseDescending, RatingAscending, RatingDescending };
+
     //Descending is newest to oldest, Ascending is oldest to newest
 
     public class DetailedSearchController : Controller
@@ -58,7 +61,7 @@ namespace Group14_BevoBooks.Controllers
         }
 
         //queries the results -- has to match the detailed search page
-        public ActionResult SearchResult(String Title, String Author, String BookID, int SelectedGenre, TitleOrder SelectedTitleOrder, AuthorOrder SelectedAuthorOrder, PopularityOrder SelectedPopularityOrder, ReleaseOrder SelectedReleaseOrder, RatingOrder SelectedRating)
+        public ActionResult SearchResult(String Title, String Author, String BookID, int SelectedGenre, SortOrder SortSelected )
         {
             SetInStock();
 
@@ -113,73 +116,58 @@ namespace Group14_BevoBooks.Controllers
                 query = query.Where(c => c.Genre == GenreToDisplay);
             }
 
-            switch (SelectedTitleOrder)
-            {
-                case TitleOrder.Descending:
-                    query = query.OrderByDescending(c => c.Title);
-                    break;
-                case TitleOrder.Ascending:
-                    query = query.OrderBy(c => c.Title);
-                    break;
-                default:
-                    query = query.OrderByDescending(c => c.Title);
-                    break;
-            }
-
-            switch (SelectedAuthorOrder)
-            {
-                case AuthorOrder.Descending:
-                    query = query.OrderByDescending(c => c.Author);
-                    break;
-                case AuthorOrder.Ascending:
-                    query = query.OrderBy(c => c.Author);
-                    break;
-                    /*default:
-                        query = query.OrderByDescending(c => c.Author);
-                        break;*/
-            }
-
-            switch (SelectedPopularityOrder)
-            {
-                case PopularityOrder.Descending:
-                    query = query.OrderByDescending(c => c.intPopularity);
-                    break;
-                case PopularityOrder.Ascending:
-                    query = query.OrderBy(c => c.intPopularity);
-                    break;
-                    /*default:
-                        query = query.OrderByDescending(c => c.intPopularity);
-                        break;*/
-            }
-            switch (SelectedReleaseOrder)
-            {
-                case ReleaseOrder.Descending:
-                    query = query.OrderByDescending(c => c.PublishedDate);
-                    break;
-                case ReleaseOrder.Ascending:
-                    query = query.OrderBy(c => c.PublishedDate);
-                    break;
-                    /*default:
-                        query = query.OrderByDescending(c => c.PublishedDate);
-                        break;*/
-            }
-            switch (SelectedRating)
-            {
-                case RatingOrder.Descending:
-                    query = query.OrderByDescending(c => c.decAverageRating);
-                    break;
-                case RatingOrder.Ascending:
-                    query = query.OrderBy(c => c.decAverageRating);
-                    break;
-            }
-
-            //This selects all the books
             List<Book> SelectedBooks = query.ToList();
             SelectedBooks = query.Include(r => r.Genre).ToList();
             ViewBag.SelectedBooks = SelectedBooks.Count();
             ViewBag.TotalBooks = _db.Books.Count();
-            //return View("SearchResult", SelectedBooks);
-            return View(SelectedBooks.OrderBy(r => r.Title).ThenBy(c => c.Author).ThenBy(c => c.intPopularity).ThenBy(c => c.PublishedDate).ThenBy(c => c.decAverageRating));
+
+            switch (SortSelected)
+            {
+                case SortOrder.TitleDescending:
+                    SelectedBooks = SelectedBooks.OrderByDescending(c => c.Title).ToList();
+                    break;
+
+                case SortOrder.TitleAscending:
+                    SelectedBooks = SelectedBooks.OrderBy(c => c.Title).ToList();
+                    break;
+
+                case SortOrder.AuthorDescending:
+                    SelectedBooks = SelectedBooks.OrderBy(c => c.Author).ToList();
+                    break;
+
+                case SortOrder.AuthorAscending:
+                    SelectedBooks = SelectedBooks.OrderByDescending(c => c.Author).ToList();
+                    break;
+
+                case SortOrder.PopularityDescending:
+                    SelectedBooks = SelectedBooks.OrderByDescending(c => c.intPopularity).ToList();
+                    break;
+
+                case SortOrder.PopularityAscending:
+                    SelectedBooks = SelectedBooks.OrderBy(c => c.intPopularity).ToList();
+                    break;
+
+                case SortOrder.ReleaseDescending:
+                    SelectedBooks = SelectedBooks.OrderByDescending(c => c.PublishedDate).ToList();
+                    break;
+
+                case SortOrder.ReleaseAscending:
+                    SelectedBooks = SelectedBooks.OrderBy(c => c.PublishedDate).ToList();
+                    break;
+
+                case SortOrder.RatingDescending:
+                    SelectedBooks = SelectedBooks.OrderByDescending(c => c.decAverageRating).ToList();
+                    break;
+
+                case SortOrder.RatingAscending:
+                    SelectedBooks = SelectedBooks.OrderBy(c => c.decAverageRating).ToList();
+                    break;
+
+            }
+
+
+            return View(SelectedBooks);
+        
         }
 
 
@@ -219,6 +207,7 @@ namespace Group14_BevoBooks.Controllers
             }
             _db.SaveChanges();
         }
+
     }
 
 }

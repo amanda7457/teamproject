@@ -261,7 +261,7 @@ namespace Group14_BevoBooks.Controllers
                         throw;
                     }
                 }
-                return View("ApproveView", review);
+                return RedirectToAction("Index");
             }
             return View(review);
         }

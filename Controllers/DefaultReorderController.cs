@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Group14_BevoBooks.DAL;
 using Group14_BevoBooks.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Group14_BevoBooks.Controllers
 {
+    [Authorize(Roles = "Manager")]
     public class DefaultReorderController : Controller
     {
         private readonly AppDbContext _context;
@@ -43,29 +45,6 @@ namespace Group14_BevoBooks.Controllers
             return View(defaultReorder);
         }
 
-        // GET: DefaultReorder/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: DefaultReorder/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("DefaultReorderID,DefaultQuantity")] DefaultReorder defaultReorder)
-        {
-            if (ModelState.IsValid)
-            {
-                defaultReorder.ManagerSet = _context.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
-
-                _context.Add(defaultReorder);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(defaultReorder);
-        }
 
         // GET: DefaultReorder/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -123,34 +102,6 @@ namespace Group14_BevoBooks.Controllers
             return View(defaultReorder);
         }
 
-        // GET: DefaultReorder/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var defaultReorder = await _context.ReorderQuantity
-                .FirstOrDefaultAsync(m => m.DefaultReorderID == id);
-            if (defaultReorder == null)
-            {
-                return NotFound();
-            }
-
-            return View(defaultReorder);
-        }
-
-        // POST: DefaultReorder/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var defaultReorder = await _context.ReorderQuantity.FindAsync(id);
-            _context.ReorderQuantity.Remove(defaultReorder);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
 
         private bool DefaultReorderExists(int id)
         {
