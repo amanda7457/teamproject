@@ -10,10 +10,12 @@ namespace Group14_BevoBooks.Models
 
         [Display(Name = "Shipping Price - First Book")]
         [DisplayFormat(DataFormatString = "{0:C}")]
+        [Range(0, Double.MaxValue, ErrorMessage = "The value must be greater than 0")]
         public Decimal ShippingFirst  { get; set; }
 
         [Display(Name = "Shipping Price - Each Additional Book")]
         [DisplayFormat(DataFormatString = "{0:C}")]
+        [Range(0, Double.MaxValue, ErrorMessage = "The value must be greater than 0")]
         public Decimal ShippingAdditional { get; set; }
 
         //navigation

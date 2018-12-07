@@ -121,7 +121,7 @@ namespace Group14_BevoBooks.Models
                 int bookboughtcount = odplaced.Count();
 
                 Decimal averageprice;
-                if (odplaced == null)
+                if (odplaced.Count() == 0)
                 {
                     averageprice = SellingPrice;
                 }
