@@ -190,7 +190,9 @@ namespace Group14_BevoBooks.Controllers
         [Authorize(Roles = "Employee, Manager")]
         public async Task<IActionResult> ApproveReview(int id)
         {
-            Review review = _context.Reviews.Find(id);
+            AppUser user = _context.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            Review review = _context.Reviews.Include(r => r.Approver).Include(b => b.Book).FirstOrDefault(r => r.ReviewID == id);
             if (id != review.ReviewID)
             {
                 return NotFound();
@@ -200,6 +202,9 @@ namespace Group14_BevoBooks.Controllers
             {
                 try
                 {
+                    review.Approver = user;
+                    review.Approved = true;
+
                     _context.Update(review);
                     await _context.SaveChangesAsync();
                 }
@@ -214,7 +219,7 @@ namespace Group14_BevoBooks.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return View("ApproveView", review);
             }
             return View(review);
         }

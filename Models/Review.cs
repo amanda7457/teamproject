@@ -15,7 +15,7 @@ namespace Group14_BevoBooks.Models
         [StringLength(100, MinimumLength = 1, ErrorMessage = "Reviews must be between 1 and 100 characters")]
         public String ReviewText { get; set; }
 
-        public Boolean Approved { get; set; }
+        public Boolean? Approved { get; set; }
 
         //navigation
         public AppUser Author { get; set; }

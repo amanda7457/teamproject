@@ -175,7 +175,7 @@ namespace Group14_BevoBooks.Controllers
 
             //This selects all the books
             List<Book> SelectedBooks = query.ToList();
-            SelectedBooks = query.Include(r => r.Genre).ToList();
+            SelectedBooks = query.Include(r => r.Genre).Include(r => r.Reviews).ToList();
             ViewBag.SelectedBooks = SelectedBooks.Count();
             ViewBag.TotalBooks = _db.Books.Count();
             //return View("SearchResult", SelectedBooks);
