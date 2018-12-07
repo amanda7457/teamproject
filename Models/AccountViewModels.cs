@@ -99,6 +99,14 @@ namespace Group14_BevoBooks.Models
         public string ConfirmPassword { get; set; }
     }   
 
+    public class ChangePhoneNumber
+    {
+        [Required]
+        [DataType(DataType.PhoneNumber)]
+        [Display(Name = "New Phone Number")]
+        public string NewPhoneNumber { get; set; }
+
+    }
     public class IndexViewModel
     {
         public bool HasPassword { get; set; }

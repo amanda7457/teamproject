@@ -151,6 +151,11 @@ namespace Group14_BevoBooks.Controllers
             return View(ivm);
         }
 
+        public ActionResult ChangePhoneNumber()
+        {
+            return View();
+        }
+
 
 
         //Logic for change password
@@ -158,6 +163,22 @@ namespace Group14_BevoBooks.Controllers
         public ActionResult ChangePassword()
         {
             return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ChangePhoneNumber(ChangePhoneNumber model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            AppUser userLoggedIn = await _userManager.FindByNameAsync(User.Identity.Name);
+
+            userLoggedIn.PhoneNumber = model.NewPhoneNumber;
+            return View(model);
+
         }
 
         //
