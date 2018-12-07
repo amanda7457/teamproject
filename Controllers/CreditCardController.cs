@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Group14_BevoBooks.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -34,6 +35,7 @@ namespace Group14_BevoBooks.Controllers
                 return View("Error", new string[] { "You cannot store more then 3 Credit Cards - please edit an existing card" });
             }
 
+            ViewBag.CardList = GetCardTypes();
             return View();
         }
 
@@ -42,13 +44,38 @@ namespace Group14_BevoBooks.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(int id, [Bind("CreditCardID, CardNumber")] CreditCard creditcard)
+        public async Task<IActionResult> Create(int id, [Bind("CreditCardID, CardNumber")] CreditCard creditcard, int SelectedCardType)
         {
             if (ModelState.IsValid)
             {
                 AppUser user = _context.Users.Include(u => u.CreditCards).FirstOrDefault(u => u.UserName == User.Identity.Name);
 
                 creditcard.AppUser = user;
+
+                CardType type;
+                if (SelectedCardType == 0)
+                {
+                    type = CardType.Visa;
+                    creditcard.CardType = type;
+                }
+
+                if (SelectedCardType == 1)
+                {
+                    type = CardType.AmericanExpress;
+                    creditcard.CardType = type;
+                }
+
+                if (SelectedCardType == 2)
+                {
+                    type = CardType.MasterCard;
+                    creditcard.CardType = type;
+                }
+
+                if (SelectedCardType == 3)
+                {
+                    type = CardType.Discover;
+                    creditcard.CardType = type;
+                }
 
                 _context.Add(creditcard);
 
@@ -76,6 +103,7 @@ namespace Group14_BevoBooks.Controllers
                 return NotFound();
             }
 
+            ViewBag.CardList = GetCardTypes();
             return View(creditcard);
         }
 
@@ -84,7 +112,7 @@ namespace Group14_BevoBooks.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CreditCardID, CardNumber")] CreditCard creditcard)
+        public async Task<IActionResult> Edit(int id, [Bind("CreditCardID, CardNumber")] CreditCard creditcard, int SelectedCardType)
         //public async Task<IActionResult> Edit(int id, string CardNumber)
         {
             if (id != creditcard.CreditCardID)
@@ -92,7 +120,30 @@ namespace Group14_BevoBooks.Controllers
                 return NotFound();
             }
 
-            //CreditCard creditcard = _context.CreditCards.Find(id);
+            CardType type;
+            if (SelectedCardType == 0)
+            {
+                type = CardType.Visa;
+                creditcard.CardType = type;
+            }
+
+            if (SelectedCardType == 1)
+            {
+                type = CardType.AmericanExpress;
+                creditcard.CardType = type;
+            }
+
+            if (SelectedCardType == 2)
+            {
+                type = CardType.MasterCard;
+                creditcard.CardType = type;
+            }
+
+            if (SelectedCardType == 3)
+            {
+                type = CardType.Discover;
+                creditcard.CardType = type;
+            }
 
             if (ModelState.IsValid)
             {
@@ -118,6 +169,16 @@ namespace Group14_BevoBooks.Controllers
                 }
             }
             return View(creditcard);
+        }
+
+        public SelectList GetCardTypes()
+        {
+            var cardtypes = from CardType b in Enum.GetValues(typeof(CardType))
+                                select new { ID = (int)b, Name = b.ToString() };
+
+            SelectList sortselect = new SelectList(cardtypes, "ID", "Name");
+
+            return sortselect;
         }
 
         private bool CreditCardExists(int id)

@@ -261,6 +261,8 @@ namespace Group14_BevoBooks.Controllers
             return View(booksinventory);
         }
 
+        //TODO: add review report and make sort look better????
+
         public SelectList GetBookSort()
         {
             var booksorts = from BookSort b in Enum.GetValues(typeof(BookSort))

@@ -49,6 +49,7 @@ namespace Group14_BevoBooks.Controllers
         // GET: Book/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            Boolean alreadyincart;
             if (id == null)
             {
                 return NotFound();
@@ -60,6 +61,35 @@ namespace Group14_BevoBooks.Controllers
             {
                 return NotFound();
             }
+
+            int ordernumber = AlreadyInCart();
+            if (ordernumber != -1)
+            {
+                Order cartorder = _context.Orders.Include(o => o.OrderDetails).ThenInclude(o => o.Book).FirstOrDefault(o => o.OrderID == ordernumber);
+
+                List<Book> booksincart = new List<Book>();
+
+                foreach (OrderDetail od in cartorder.OrderDetails)
+                {
+                    Book b = od.Book;
+                    booksincart.Add(b);
+                }
+
+                if (booksincart.Contains(book))
+                {
+                    alreadyincart = true;
+                }
+                else
+                {
+                    alreadyincart = false;
+                }
+            }
+
+            else
+            {
+                alreadyincart = false;
+            }
+
 
             //different views depending on role
             if (User.IsInRole("Employee"))
@@ -76,9 +106,19 @@ namespace Group14_BevoBooks.Controllers
 
             if (seereviewdetail == true)
             {
+                if (alreadyincart == true)
+                {
+                    ViewBag.Message = "WARNING: This book is already in your cart.";
+                }
+
                 return View("DetailsReview", book);
             }
 
+
+            if (alreadyincart == true)
+            {
+                ViewBag.Message = "WARNING: This book is already in your cart.";
+            }
             return View(book);
         }
 
@@ -229,14 +269,14 @@ namespace Group14_BevoBooks.Controllers
             return _context.Books.Any(e => e.BookID == id);
         }
 
-		public Boolean CanSeeReview(int? bookid)
-		{
+        public Boolean CanSeeReview(int? bookid)
+        {
             AppUser user = _context.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
 
             List<Order> orderlist = new List<Order>();
-            
+
             //all orders for person logged in
-			orderlist = _context.Orders.Include(o => o.AppUser).Include(m => m.OrderDetails).ThenInclude(o => o.Book).
+            orderlist = _context.Orders.Include(o => o.AppUser).Include(m => m.OrderDetails).ThenInclude(o => o.Book).
                 Where(o => o.AppUser == user).ToList();
 
             List<OrderDetail> orderdetails = new List<OrderDetail>();
@@ -262,7 +302,7 @@ namespace Group14_BevoBooks.Controllers
 
             Book book = _context.Books.Find(bookid);
 
-            if(books.Contains(book))
+            if (books.Contains(book))
             {
                 return true;
             }
@@ -272,7 +312,44 @@ namespace Group14_BevoBooks.Controllers
                 return false;
             }
 
-		}
+        }
+
+        public int AlreadyInCart()
+        {
+            //variables
+            AppUser user = _context.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+            List<Order> orderlist = new List<Order>();
+            bool orderplaced;
+            Order lastorder;
+
+            try
+            {
+                //find most recent order
+                orderlist = _context.Orders.Include(o => o.OrderDetails).Where(o => o.AppUser.UserName == User.Identity.Name).ToList();
+                lastorder = orderlist.LastOrDefault();
+                orderplaced = lastorder.OrderPlaced;
+            }
+            catch
+            {
+                orderlist = new List<Order>();
+                orderplaced = true;
+                lastorder = null;
+            }
+
+
+            bool isEmpty = !orderlist.Any();
+            if (isEmpty == true || orderplaced == true)
+            {
+                Int32 ordernumber = -1;
+                return ordernumber;
+            }
+            else
+            {
+                Int32 ordernumber = lastorder.OrderID;
+                return ordernumber;
+            }
+        }
+
 
         public void SetActive()
         {

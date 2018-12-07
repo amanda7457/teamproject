@@ -169,9 +169,9 @@ namespace Group14_BevoBooks.Controllers
             if (ModelState.IsValid)
             {
                 //check if book is in stock -- TODO probably need to add some more logic here
-                if (book.Inventory == 0)
+                if (book.Inventory < Quantity)
                 {
-                    ViewBag.Message = "Sorry - this book is out of stock.";
+                    ViewBag.Message = "We do not have enough books in stock - please add a lower quantity";
                     return View(od);
                 }
 
