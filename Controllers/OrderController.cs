@@ -530,7 +530,7 @@ namespace Group14_BevoBooks.Controllers
             string ordernumber = order.OrderID.ToString();
             string orderdate = order.OrderDate.ToString();
             string subtotal = order.OrderSubtotal.ToString();
-            string ordertotal = order.OrderSubtotal.ToString();
+            string ordertotal = order.OrderTotal.ToString();
 
             List<Book> ReccomendBooks= new List <Book>();
 
@@ -549,7 +549,7 @@ namespace Group14_BevoBooks.Controllers
             }
 
             String strOrderEmail = GetOrderEmail();
-            String strEmailBody = "Congratulations - You have successfully placed an order. Here are your order details: " + "Reccomended Books" + FinalReccomend  ;
+            String strEmailBody = "Congratulations - You have successfully placed an order. Here are your order details: Order Number"+ ordernumber + "Order Date"+ orderdate + "Order Total" + ordertotal + "Reccomended Books" + FinalReccomend  ;
             Utilities.EmailMessaging.SendEmail(strOrderEmail, "Order Placed", strEmailBody);
             return RedirectToAction("Index", "Reccomendation");
         }
