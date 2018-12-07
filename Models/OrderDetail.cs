@@ -27,10 +27,7 @@ namespace Group14_BevoBooks.Models
 
         [Display(Name = "Cost")]
         [DisplayFormat(DataFormatString = "{0:C}")]
-        public Decimal Cost
-        {
-            get { return Quantity * Book.AverageCost; }
-        }
+        public Decimal Cost { get; set; }
 
         //navigation
         public Order Order { get; set; }
