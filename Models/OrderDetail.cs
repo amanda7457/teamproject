@@ -8,6 +8,7 @@ namespace Group14_BevoBooks.Models
         public Int32 OrderDetailID { get; set; }
 
         [Display(Name = "Quantity")]
+        [Range(0, Double.MaxValue, ErrorMessage = "The value must be greater than 0")]
         public Int32 Quantity { get; set; }
 
         [Display(Name = "Price")]

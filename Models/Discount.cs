@@ -16,6 +16,7 @@ namespace Group14_BevoBooks.Models
         public string PromoCode { get; set; }
 
         [Display(Name = "Discount Amount")]
+        [Range(0, Double.MaxValue, ErrorMessage = "The value must be greater than 0")]
         public Decimal DiscountAmount { get; set; }
 
         [Display(Name = "Start Date")]

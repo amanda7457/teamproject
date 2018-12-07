@@ -102,7 +102,7 @@ namespace Group14_BevoBooks.Controllers
             }
 
 
-            Boolean seereviewdetail = CanSeeReview(id, book);
+            Boolean seereviewdetail = CanSeeReview(id);
 
             if (seereviewdetail == true)
             {

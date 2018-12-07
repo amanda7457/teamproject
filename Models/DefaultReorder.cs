@@ -9,6 +9,7 @@ namespace Group14_BevoBooks.Models
         public Int32 DefaultReorderID { get; set; }
 
         [Display(Name = "Default Reorder Quantity")]
+        [Range(0, Double.MaxValue, ErrorMessage = "The value must be greater than 0")]
         public Int32 DefaultQuantity  { get; set; }
 
         //navigation
