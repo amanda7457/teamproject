@@ -55,8 +55,9 @@ namespace Group14_BevoBooks.Controllers
                 return NotFound();
             }
 
-            var book = await _context.Books.Include(b => b.Genre)
+            Book book = await _context.Books.Include(b => b.Genre).Include(b => b.Reviews)
                 .FirstOrDefaultAsync(m => m.BookID == id);
+
             if (book == null)
             {
                 return NotFound();

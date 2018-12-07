@@ -57,6 +57,29 @@
     <button type="submit" class="btn btn-danger">Order From Supplier</button>
 </form>
 
+<div>Approved Reviews</div>
+<table class="table table-hover">
+    <thead class="thead-dark">
+    <thead>
+        <tr>
+            <th>Rating</th>
+            <th>Review</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Review r in Model.Reviews)
+        {
+            @if (r.Approved == true)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => r.Rating)</td>
+                    <td>@Html.DisplayFor(modelItem => r.ReviewText)</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
 <div>
     <a asp-action="Index">Back to List</a>
 </div>

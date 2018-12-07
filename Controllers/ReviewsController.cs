@@ -23,7 +23,9 @@ namespace Group14_BevoBooks.Controllers
         // GET: Reviews
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Reviews.Include(r => r.Author).Include(r => r.Book).ToListAsync());
+            List<Review> pendingreviews = _context.Reviews.Include(r => r.Author).Include(r => r.Book).Where(r => r.Approved == null).ToList();
+
+            return View(pendingreviews);
         }
 
         // GET: Reviews/Details/5
@@ -78,6 +80,7 @@ namespace Group14_BevoBooks.Controllers
             {
                 review.Author = user;
                 review.Book = book;
+                review.Approved = null;
 
 
                 AppUser userperson = _context.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
@@ -204,6 +207,43 @@ namespace Group14_BevoBooks.Controllers
                 {
                     review.Approver = user;
                     review.Approved = true;
+
+                    _context.Update(review);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!ReviewExists(review.ReviewID))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return View("ApproveView", review);
+            }
+            return View(review);
+        }
+
+        [Authorize(Roles = "Employee, Manager")]
+        public async Task<IActionResult> RejectReview(int id)
+        {
+            AppUser user = _context.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            Review review = _context.Reviews.Include(r => r.Approver).Include(b => b.Book).FirstOrDefault(r => r.ReviewID == id);
+            if (id != review.ReviewID)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    review.Approver = user;
+                    review.Approved = false;
 
                     _context.Update(review);
                     await _context.SaveChangesAsync();
