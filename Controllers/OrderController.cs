@@ -548,10 +548,66 @@ namespace Group14_BevoBooks.Controllers
 
             }
 
-            String strOrderEmail = GetOrderEmail();
-            String strEmailBody = "Congratulations - You have successfully placed an order. Here are your order details: Order Number"+ ordernumber + "Order Date"+ orderdate + "Order Total" + ordertotal + "Reccomended Books" + FinalReccomend  ;
-            Utilities.EmailMessaging.SendEmail(strOrderEmail, "Order Placed", strEmailBody);
+            int CountReccomend; 
+            CountReccomend= FinalReccomend.Count();
+
+            if (CountReccomend == 3)
+            {
+                string bookone;
+                string booktwo;
+                string bookthree;
+
+                bookone = FinalReccomend[0];
+                booktwo = FinalReccomend[1];
+                bookthree = FinalReccomend[2];
+
+                String strOrderEmail = GetOrderEmail();
+                String strEmailBody = "Congratulations - You have successfully placed an order. Here are your order details:" + "\n" + "Order Number " + ordernumber + "\n" + "Order Date " + orderdate + "\n" + "Order Total $" + ordertotal + "\n" + "Reccomended Book(s) " + "\n" + bookone + "\n" +  booktwo + "\n" + bookthree;
+                Utilities.EmailMessaging.SendEmail(strOrderEmail, "Order Placed", strEmailBody);
+                return RedirectToAction("Index", "Reccomendation");
+
+
+            }
+
+            if (CountReccomend==2)
+            {
+                string bookone;
+                string booktwo;
+
+                bookone = FinalReccomend[0];
+                booktwo = FinalReccomend[1];
+
+                String strOrderEmail = GetOrderEmail();
+                String strEmailBody = "Congratulations - You have successfully placed an order. Here are your order details:" + "\n" + "Order Number " + ordernumber + "\n" + "Order Date " + orderdate + "\n" + "Order Total $" + ordertotal + "\n" + "Reccomended Book(s) " + "\n" + bookone + "\n" +  booktwo;
+                Utilities.EmailMessaging.SendEmail(strOrderEmail, "Order Placed", strEmailBody);
+                return RedirectToAction("Index", "Reccomendation");
+            }
+
+            if (CountReccomend == 1)
+            {
+                string bookone;
+            
+
+                bookone = FinalReccomend[0];
+
+
+                String strOrderEmail = GetOrderEmail();
+                String strEmailBody = "Congratulations - You have successfully placed an order. Here are your order details:" + "\n" + "Order Number " + ordernumber + "\n" + "Order Date " + orderdate + "\n" + "Order Total $" + ordertotal + "\n" + "Reccomended Book(s) " + bookone;
+                Utilities.EmailMessaging.SendEmail(strOrderEmail, "Order Placed", strEmailBody);
+                return RedirectToAction("Index", "Reccomendation");
+            }
+
+            if (CountReccomend == 0)
+            {
+               
+                String strOrderEmail = GetOrderEmail();
+                String strEmailBody = "Congratulations - You have successfully placed an order. Here are your order details:" + "\n" + "Order Number " + ordernumber + "\n" + "Order Date " + orderdate + "\n" + "Order Total $" + ordertotal + "\n" + "We have no books to reccomend apologie";
+                Utilities.EmailMessaging.SendEmail(strOrderEmail, "Order Placed", strEmailBody);
+                return RedirectToAction("Index", "Reccomendation");
+            }
+
             return RedirectToAction("Index", "Reccomendation");
+
         }
 
         public String GetOrderEmail()
@@ -562,12 +618,17 @@ namespace Group14_BevoBooks.Controllers
             String id = User.Identity.Name;
             AppUser user = _context.Users.FirstOrDefault(u => u.UserName == id);
 
-            string email = user.Email;
+            //populate the view model
+            iv.Email = user.Email;
+            iv.HasPassword = true;
+            iv.UserID = user.Id;
+            iv.UserName = user.UserName;
 
-            String OrderE;
-            OrderE = iv.Email;
-            return OrderE;
+            String WOWEmail;
+            WOWEmail = iv.Email;
+            return WOWEmail;
         }
+
 
         public IActionResult Confirmation(int id)
         {
