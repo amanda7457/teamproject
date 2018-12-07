@@ -17,7 +17,7 @@ namespace Group14_BevoBooks.Utilities
             }
             else
             {
-                intMaxBookNumber = db.Books.Max(c => c.BookID); //this is the highest number in the database right now
+                intMaxBookNumber = db.Books.Max(c => c.UniqueID); //this is the highest number in the database right now
             }
 
             //add one to the current max to find the next one
