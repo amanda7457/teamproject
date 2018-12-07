@@ -83,19 +83,19 @@ namespace Group14_BevoBooks.Models
         {
             get
             {
-                int bookssoldcount = OrderDetails.Sum(bo => bo.Quantity);
+                int booksboughtcount = BookOrders.Sum(bo => bo.Quantity);
 
                 Decimal averagecost;
-                if (bookssoldcount == 0)
+                if (booksboughtcount >= 1)
                 {
-                    averagecost = SupplierPrice;
+                    Decimal costsum = BookOrders.Sum(bo => bo.Price);
+
+                    averagecost = costsum / booksboughtcount;
                 }
 
                 else
                 {
-                    Decimal costsum = BookOrders.Sum(bo => bo.Price);
-
-                    averagecost = costsum / bookssoldcount;
+                    averagecost = SupplierPrice;
                 }
 
                 return averagecost;
