@@ -82,8 +82,10 @@ namespace Group14_BevoBooks.Controllers
                 review.Book = book;
                 review.Approved = null;
 
-
                 AppUser userperson = _context.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                _context.Reviews.Add(review);
+                _context.SaveChanges();
 
                 if (User.IsInRole("Manager") == true)
                 {
