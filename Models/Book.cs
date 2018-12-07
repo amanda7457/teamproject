@@ -137,6 +137,8 @@ namespace Group14_BevoBooks.Models
             }
         }
 
+        public Boolean Discontinued { get; set; }
+
         //navigation
 
         public List<OrderDetail> OrderDetails { get; set; }
