@@ -146,6 +146,12 @@ namespace Group14_BevoBooks.Controllers
             ivm.HasPassword = true;
             ivm.UserID = user.Id;
             ivm.UserName = user.UserName;
+            ivm.NewPhoneNumber = user.PhoneNumber;
+            ivm.NewEmail = user.Email;
+            ivm.NewAddress = user.Address;
+            ivm.NewLastName = user.LastName;
+            ivm.NewFirstName = user.FirstName;
+            
 
 
             return View(ivm);
@@ -156,11 +162,69 @@ namespace Group14_BevoBooks.Controllers
             return View();
         }
 
+        public ActionResult ChangeFirstName()
+        {
+            return View();
+        }
 
+        public ActionResult ChangeLastName()
+        {
+            return View();
+        }
 
-        //Logic for change password
-        // GET: /Account/ChangePassword
-        public ActionResult ChangePassword()
+        public ActionResult ChangeEmail()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ChangeEmail(ChangeEmail model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            AppUser userLoggedIn = await _userManager.FindByNameAsync(User.Identity.Name);
+
+            userLoggedIn.Email = model.NewEmail;
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ChangeLastName(ChangeLastName model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            AppUser userLoggedIn = await _userManager.FindByNameAsync(User.Identity.Name);
+
+            userLoggedIn.LastName = model.NewLastName;
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ChangeFirstName(ChangeFirstName model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            AppUser userLoggedIn = await _userManager.FindByNameAsync(User.Identity.Name);
+
+            userLoggedIn.FirstName = model.NewFirstName;
+            return View(model);
+        }
+
+            //Logic for change password
+            // GET: /Account/ChangePassword
+            public ActionResult ChangePassword()
         {
             return View();
         }
@@ -180,6 +244,28 @@ namespace Group14_BevoBooks.Controllers
             return View(model);
 
         }
+
+        public ActionResult ChangeAddress()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ChangeAddress(ChangeAddress model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            AppUser userLoggedIn = await _userManager.FindByNameAsync(User.Identity.Name);
+
+            userLoggedIn.Address = model.NewAddress;
+            return View(model);
+
+        }
+
 
         //
         // POST: /Account/ChangePassword

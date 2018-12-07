@@ -107,11 +107,50 @@ namespace Group14_BevoBooks.Models
         public string NewPhoneNumber { get; set; }
 
     }
+
+    public class ChangeFirstName
+    {
+        [Required]
+
+        [Display(Name = "New Name")]
+        public string NewFirstName { get; set; }
+
+    }
+
+    public class ChangeLastName
+    {
+        [Required]
+        [Display(Name = "New Last Name")]
+        public string NewLastName { get; set; }
+
+    }
+
+    public class ChangeAddress
+    {
+        [Required]
+        [Display(Name = "New Address")]
+        public string NewAddress { get; set; }
+
+    }
+
+    public class ChangeEmail
+    {
+        [Required]
+        [EmailAddress]
+        [Display(Name = "New Email")]
+        public string NewEmail { get; set; }
+
+    }
     public class IndexViewModel
     {
         public bool HasPassword { get; set; }
         public String UserName { get; set; }
         public String Email { get; set; }
         public String UserID { get; set; }
+        public String NewPhoneNumber { get; set; }
+        public String NewLastName { get; set; }
+        public String NewFirstName { get; set; }
+        public String NewEmail { get; set; }
+        public String NewAddress { get; set; }
     }
 }

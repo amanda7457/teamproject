@@ -1,0 +1,16 @@
+﻿@using Group14_BevoBooks.Models
+@model Group14_BevoBooks.Models.ChangeFirstName
+<h2>Change First Name</h2>
+@using (Html.BeginForm("ChangeFirstName", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <h4>Change First Name</h4>
+    <hr />
+    @Html.ValidationSummary("", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.LabelFor(m => m.NewFirstName, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.PasswordFor(m => m.NewFirstName, new { @class = "form-control" })
+        </div>
+    </div>
+}

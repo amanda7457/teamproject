@@ -16,13 +16,52 @@
         <dd>
             [
             @if (Model.HasPassword)
-            {
-                @Html.ActionLink("Change your password", "ChangePassword")
-            }
+        {
+            @Html.ActionLink("Change your password", "ChangePassword")
+
+
+        <dt>Phone Number:</dt>
+        <dd>@Model.NewPhoneNumber</dd>
+        <dt>Email:</dt>
+        <dd>@Model.NewPhoneNumber</dd>
+
+        @Html.ActionLink("Change your phonenumber", "ChangePhoneNumber")
+
+        <dt>First Name:</dt>
+        <dd>@Model.NewFirstName</dd>
+        <dt>Email:</dt>
+        <dd>@Model.NewFirstName</dd>
+
+        @Html.ActionLink("Change your first name", "ChangeFirstName")
+
+        <dt>Last Name:</dt>
+        <dd>@Model.NewLastName</dd>
+        <dt>Email:</dt>
+        <dd>@Model.NewLastName</dd>
+
+        @Html.ActionLink("Change your last name", "ChangeLastName")
+
+        <dt>Address:</dt>
+        <dd>@Model.NewAddress</dd>
+        <dt>Email:</dt>
+        <dd>@Model.NewAddress</dd>
+
+
+        @Html.ActionLink("Change your Address", "ChangeAddress")
+
+        <dt>LEmail:</dt>
+        <dd>@Model.NewEmail</dd>
+        <dt>Email:</dt>
+        <dd>@Model.NewEmail</dd>
+
+        @Html.ActionLink("Change your Email", "ChangeEmail")
+}
             ]
 
-        </dd>
-    </dl>
+
+
+            </dd>
+        </dl>
 
 </div>
 <hr />
