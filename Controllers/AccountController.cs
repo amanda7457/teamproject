@@ -112,6 +112,11 @@ namespace Group14_BevoBooks.Controllers
                     //await _userManager.AddToRoleAsync(user, "Manager");
 
                     Microsoft.AspNetCore.Identity.SignInResult result2 = await _signInManager.PasswordSignInAsync(model.Email, model.Password, false, lockoutOnFailure: false);
+                    String strEmailEmail = model.Email;
+                    String strSubjectLine = "Account Registered";
+                    String strEmailBody = "Congratulations - You are registered as a new user.";
+                    Utilities.EmailMessaging.SendEmail(strEmailEmail, strSubjectLine, strEmailBody);
+
                     return RedirectToAction("Index", "Home");
                 }
 
@@ -122,11 +127,6 @@ namespace Group14_BevoBooks.Controllers
                         ModelState.AddModelError("", error.Description);
                     }
                 }
-
-                String strEmailEmail = model.Email;
-                String strSubjectLine = "Account Registered";
-                String strEmailBody = "Congratulations - You are registered as a new user.";
-                Utilities.EmailMessaging.SendEmail(strEmailEmail, strSubjectLine,strEmailBody);
 
             }
             return View(model);
@@ -281,18 +281,38 @@ namespace Group14_BevoBooks.Controllers
             var result = await _userManager.ChangePasswordAsync(userLoggedIn, model.OldPassword, model.NewPassword);
             if (result.Succeeded)
             {
-                await _signInManager.SignInAsync(userLoggedIn, isPersistent: false); 
+                await _signInManager.SignInAsync(userLoggedIn, isPersistent: false);
+                String strEmailEmail = GetPasswordEmail();
+                String strEmailBody = "Congratulations - You are successfully changed your password to " + model.NewPassword;
+                Utilities.EmailMessaging.SendEmail(strEmailEmail, "Password Change", strEmailBody);
                 return RedirectToAction("Index", "Home");
             }
             AddErrors(result);
-            //make a new property in the view model class ??????
-            //String strSubjectLine = "Password Changed";
-            //String strEmailBody = "Congratulations - You are successfully changed your password.";
-            //Utilities.EmailMessaging.SendEmail(strEmailEmail, strSubjectLine, strEmailBody);
 
             return View(model);
 
         }
+
+        public String GetPasswordEmail()
+        {
+            IndexViewModel ivmm = new IndexViewModel();
+
+            //get user info
+            String id = User.Identity.Name;
+            AppUser user = _db.Users.FirstOrDefault(u => u.UserName == id);
+
+            //populate the view model
+            ivmm.Email = user.Email;
+            ivmm.HasPassword = true;
+            ivmm.UserID = user.Id;
+            ivmm.UserName = user.UserName;
+
+            String WOWEmail;
+            WOWEmail = ivmm.Email;
+            return WOWEmail;
+        }
+
+        
 
         //GET:/Account/AccessDenied
         public ActionResult AccessDenied(String ReturnURL)

@@ -67,23 +67,29 @@ namespace Group14_BevoBooks.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateReview([Bind("ReviewID,Rating,ReviewText, Author, Book")] Review review)
         {
+
             AppUser user = _context.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
 
             int bookID = Convert.ToInt32(TempData["bookid"]);
             Book book = _context.Books.Find(bookID);
-
 
             if (ModelState.IsValid)
             {
                 review.Author = user;
                 review.Book = book;
 
-                _context.Reviews.Add(review);
-                await _context.SaveChangesAsync();
 
-                return RedirectToAction("Index", new { id = review.ReviewID });
+                AppUser userperson = _context.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                if (User.IsInRole("Manager") == true)
+                {
+                    return RedirectToAction("Index", new { id = review.ReviewID });
+                }
+                if (User.IsInRole("Customer") == true)
+                {
+                    return RedirectToAction("Details", new { id = review.ReviewID });
+                }
             }
-
             return View("Create", review);
         }
             
