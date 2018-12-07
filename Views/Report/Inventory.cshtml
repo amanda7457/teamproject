@@ -1,0 +1,39 @@
+﻿@using Group14_BevoBooks.Models
+@model IEnumerable<Group14_BevoBooks.Models.Book>
+@{
+    ViewData["Title"] = "Report - Current Inventory";
+}
+<p>@ViewBag.ReportCount Results</p>
+<h2>All Books Report</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Inventory)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AverageCost)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Inventory)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AverageCost)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<h5>Total Value of Inventory: @ViewBag.TotalValue</h5>

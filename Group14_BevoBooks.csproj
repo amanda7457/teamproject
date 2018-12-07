@@ -14,8 +14,12 @@
 
     <ItemGroup>
       <Content Remove="Views\OrderHistory\OrderHistory.cshtml" />
+      <Content Remove="Views\Report\Inventory.cshtml" />
     </ItemGroup>
     <ItemGroup>
       <Folder Include="Views\Report\" />
+    </ItemGroup>
+    <ItemGroup>
+      <None Include="Views\Report\Inventory.cshtml" />
     </ItemGroup>
 </Project>
