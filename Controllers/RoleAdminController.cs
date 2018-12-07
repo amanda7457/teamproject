@@ -10,7 +10,7 @@ using Group14_BevoBooks.Models;
 
 namespace Group14_BevoBooks.Controllers
 {
-    [Authorize(Roles = "Manager")]
+    [Authorize(Roles = "Manager, Employee")]
     public class RoleAdminController : Controller
     {
         private AppDbContext _db;
